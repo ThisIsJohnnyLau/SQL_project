@@ -1,0 +1,1383 @@
+\PassOptionsToPackage{unicode=true}{hyperref} % options for packages loaded elsewhere
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provides euro and other symbols
+\else % if luatex or xelatex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage[]{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\usepackage{hyperref}
+\hypersetup{
+            pdftitle={SQL Project},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+% set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+
+
+\title{SQL Project}
+\author{}
+\date{\vspace{-2.5em}}
+
+\begin{document}
+\maketitle
+
+\begin{blame}
+
+author: ``Jonathan Lau''
+
+\end{blame}
+
+\begin{emphasis}
+
+\textbf{ACME Corporation - client database}
+
+Description of data: * PostgreSQL database * Contains three tables of
+information: details of \texttt{employees}, \texttt{teams} and
+\texttt{feedbacks}. * \texttt{Feedbacks} is text detailing employees'
+positive and negative experiences at work.
+
+Project outline: • Basic analysis of stored data • Quantitative analysis
+of emotional state of corporation based on stored \texttt{feedbacks}. •
+Practising coding best practice for R and SQL.
+
+R Packages used: • keyring • RPostgreSQL
+
+\end{emphasis}
+
+Loading the required libraries
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(keyring)}
+\KeywordTok{library}\NormalTok{(RPostgreSQL)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Loading required package: DBI
+\end{verbatim}
+
+Creating a local connection from R to acme\_employees database
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Using keychain on my Macbook}
+
+\KeywordTok{keyring_unlock}\NormalTok{(}\DataTypeTok{keyring =} \StringTok{"local"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## WARNING: your platform is not supported. Input is not masked!
+\end{verbatim}
+
+\begin{verbatim}
+## Password:
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{username <-}\StringTok{ }\KeywordTok{key_get}\NormalTok{(}\DataTypeTok{service =} \StringTok{"postgresql_username"}\NormalTok{,}
+                    \DataTypeTok{keyring =} \StringTok{"local"}\NormalTok{)}
+
+\NormalTok{password <-}\StringTok{ }\KeywordTok{key_get}\NormalTok{(}\DataTypeTok{service =} \StringTok{"postgresql_password"}\NormalTok{,}
+                    \DataTypeTok{keyring =} \StringTok{"local"}\NormalTok{)}
+
+\NormalTok{db_connect<-}\StringTok{ }\KeywordTok{dbConnect}\NormalTok{(}\DataTypeTok{drv =} \KeywordTok{PostgreSQL}\NormalTok{(}\DataTypeTok{max.con =} \DecValTok{3}\NormalTok{),}
+                       \DataTypeTok{user =}\NormalTok{ username,}
+                       \DataTypeTok{password =}\NormalTok{ password,}
+                       \DataTypeTok{dbname =} \StringTok{"acme_employees"}\NormalTok{,}
+                       \DataTypeTok{host =} \StringTok{"localhost"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Mustn't forget to remove my username and password or disconnect from the
+database at the end (!)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{rm}\NormalTok{(username, password)}
+\end{Highlighting}
+\end{Shaded}
+
+Creating a new data.frame containing details of all employees by
+querying SQL database
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#dbGetQuery}
+\NormalTok{employees <-}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(}
+  \KeywordTok{dbGetQuery}\NormalTok{(db_connect,}
+             \StringTok{"SELECT * FROM employees"}\NormalTok{)}
+\NormalTok{  )}
+\NormalTok{employees}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      id  first_name      last_name                              email team_id
+## 1     1       Tabby         Lesley             tlesley0@shinystat.com       4
+## 2     2      Wallie          Edson                               <NA>       1
+## 3     3      Bunnie       Di Maria          bdimaria2@list-manage.com       3
+## 4     4      Harris      Condliffe             hcondliffe3@apache.org       1
+## 5     5       Lydia          Shout                 lshout4@flavors.me      10
+## 6     6       Gayel           Fear                gfear5@columbia.edu       7
+## 7     7     Mildrid         Pinney              mpinney6@hubpages.com       6
+## 8     8           S       Mathevet             smathevet7@state.tx.us       3
+## 9     9        Crin        Hollyar           chollyar8@vistaprint.com       1
+## 10   10      Palmer       Di Nisco              pdinisco9@behance.net       3
+## 11   11     Adelind          Shout                 ashouta@tripod.com       4
+## 12   12       Trina          Polet           tpoletb@businessweek.com      10
+## 13   13     Jasmine      Tuminelli               jtuminellic@etsy.com       1
+## 14   14      Sarita       Farenden               sfarendend@topsy.com       1
+## 15   15      Davina           Cory                      dcorye@w3.org      10
+## 16   16     Huberto       Blockley                hblockleyf@fema.gov       1
+## 17   17     Sauncho          Peake                   speakeg@digg.com       9
+## 18   18      Orelia      Passfield     opassfieldh@chicagotribune.com       1
+## 19   19       Wanda       Lardiner               wlardineri@amazon.de       7
+## 20   20     Bennett        Harvatt           bharvattj@shutterfly.com       1
+## 21   21           D         Proven             dprovenk@moonfruit.com       3
+## 22   22       Pyotr         Lantry                               <NA>       2
+## 23   23      Brenna         Belden                  bbeldenm@nasa.gov       8
+## 24   24     Dorette          Angel                  dangeln@weibo.com       3
+## 25   25    Gregorio        Brymham          gbrymhamo@list-manage.com       3
+## 26   26       Jayne      Crankhorn       jcrankhornp@chronoengine.com       7
+## 27   27       Hildy           Main               hmainq@over-blog.com       8
+## 28   28      Lionel           Noli                  lnolir@joomla.org       9
+## 29   29    Rockwell         Chasen               rchasens@cornell.edu       3
+## 30   30      Rianon         Fulkes            rfulkest@deviantart.com       9
+## 31   31 Annecorinne         Merton             amertonu@clickbank.net       8
+## 32   32      Imogen      Hovington           ihovingtonv@hubpages.com       1
+## 33   33     Dorella        Crowden                  dcrowdenw@pbs.org       9
+## 34   34  Montgomery          Lyard             mlyardx@washington.edu       1
+## 35   35       Noach        Hollyer                   nhollyery@i2i.jp       5
+## 36   36        Asia      Hatherill          ahatherillz *at* java.com       9
+## 37   37     Wilfrid       Christal             wchristal10@oracle.com       9
+## 38   38      Jenica   Van Der Hoog      jvanderhoog11@photobucket.com      10
+## 39   39      Hollis         Sevior              hsevior12@archive.org       4
+## 40   40          My      Scripture         mscripture13@geocities.com       1
+## 41   41     Neville      Rushworth           nrushworth14@harvard.edu       6
+## 42   42      Tracee        Frankes             tfrankes15@squidoo.com       9
+## 43   43       Lilla          Ellor                   lellor16@gnu.org       9
+## 44   44     Brittne       Brislawn            bbrislawn17@webnode.com       1
+## 45   45    Tallulah         Canedo         tcanedo18@wunderground.com       8
+## 46   46     Grannie       Iskowicz                 giskowicz19@un.org       9
+## 47   47       Barde         Tourot            btourot1a@123-reg.co.uk       2
+## 48   48         Sal      Rockcliff          srockcliff1b@china.com.cn       3
+## 49   49     Cheston      Reichardt               creichardt1c@ted.com       8
+## 50   50     Rickert         Fearns              rfearns1d@yahoo.co.jp       7
+## 51   51        Wash      Hannaford              whannaford1e@cnet.com       7
+## 52   52      Zondra        Elphick          zelphick1f@soundcloud.com       9
+## 53   53     Cornall        Tempest            ctempest1g@geocities.jp       6
+## 54   54  Marcelline         Jahnke                  mjahnke1h@fc2.com       4
+## 55   55      Linnea         Berger                lberger1i@google.fr       2
+## 56   56           J        Satcher  jsatcher1j@networkadvertising.org       3
+## 57   57       Lilia        Ducarne                 lducarne1k@who.int      10
+## 58   58    Ingaborg    Pocklington           ipocklington1l@ocn.ne.jp       7
+## 59   59   Guendolen       Morshead               gmorshead1m@blog.com       1
+## 60   60     Osbourn      Danzelman             odanzelman1n@google.cn      10
+## 61   61       Sacha       Meredyth            smeredyth1o@state.tx.us       1
+## 62   62        Duky          Shord              dshord1p@edublogs.org      10
+## 63   63       Dorie          Bains              dbains1q@buzzfeed.com       5
+## 64   64      Adrian      McQuillin        amcquillin1r@soundcloud.com       8
+## 65   65   Albertina        Anespie            aanespie1s@buzzfeed.com       4
+## 66   66     Crystal         Cotton               ccotton1t@cpanel.net       2
+## 67   67       Leese       Linstead             llinstead1u@github.com       3
+## 68   68        Lori      Giorgioni        lgiorgioni1v@infoseek.co.jp       6
+## 69   69       Sammy        Debrick                sdebrick1w@usgs.gov       5
+## 70   70      Isador        Sneaker            isneaker1x@amazon.co.uk       5
+## 71   71      Evania       Robjents             erobjents1y@cpanel.net      10
+## 72   72       Sammy     Muggleston           smuggleston1z@dion.ne.jp       5
+## 73   73     Stearne         Eckert            seckert20@shinystat.com       5
+## 74   74     Janenna       Gallaher            jgallaher21@walmart.com       2
+## 75   75        Vita        Munnery              vmunnery22@tumblr.com       3
+## 76   76     Shannon         Spalls                   sspalls23@qq.com       9
+## 77   77     Danella       Renzullo                drenzullo24@soup.io       5
+## 78   78       Roman          Abazi                 rabazi25@google.it       2
+## 79   79      Arline          Upton          aupton26@domainmarket.com       3
+## 80   80       Bonny         Rawsen              brawsen27@pcworld.com       1
+## 81   81   Christyna      Calbreath               ccalbreath28@free.fr       3
+## 82   82       Maxie      Risebarer              mrisebarer29@jugem.jp       1
+## 83   83         Ian      Blonfield              iblonfield2a admin.ch       2
+## 84   84      Cullen         McGown         cmcgown2b@sciencedaily.com       8
+## 85   85      Persis       Tolhurst            ptolhurst2c@plala.or.jp       6
+## 86   86      Norene      Filchagin    nfilchagin2d@huffingtonpost.com       4
+## 87   87       Latia       McKeggie             lmckeggie2e@oakley.com       9
+## 88   88      Joelie        Ruberry               jruberry2f@yandex.ru       1
+## 89   89      Krista       Lebreton          klebreton2g@clickbank.net       6
+## 90   90       Titus       Spurgeon               tspurgeon2h@sohu.com       5
+## 91   91    Jonathon        McGlynn                 jmcglynn2i@fc2.com       9
+## 92   92      Astrix        Geldard             ageldard2j@behance.net       9
+## 93   93           T         Regina                tregina2k@about.com       1
+## 94   94    Emanuele      Georgescu              egeorgescu2l@1688.com      10
+## 95   95       Jozef        Yerrill            jyerrill2m@yolasite.com       6
+## 96   96        Jana        Bygrave        jbygrave2n@surveymonkey.com       5
+## 97   97        Rabi       Ellsbury           rellsbury2o@facebook.com       6
+## 98   98   Westbrook         Ubanks              wubanks2p@youtube.com       8
+## 99   99      Jeanne        Dimmick               jdimmick2q@wikia.com       6
+## 100 100        Toby      Blaisdell                               <NA>       7
+## 101 101    Kathryne         Toomey      ktoomey2s@businessinsider.com       8
+## 102 102       Iggie        Griffey              igriffey2t@toplist.cz       4
+## 103 103  Concettina          Scown              cscown2u@bandcamp.com       9
+## 104 104      Giulio        Haliday           ghaliday2v@moonfruit.com       5
+## 105 105       Maire      Skiplorne               mskiplorne2w@com.com       6
+## 106 106        Ilse       Barltrop          ibarltrop2xmacromedia.com       4
+## 107 107      Alejoa      Broomhead            abroomhead2y@meetup.com       9
+## 108 108    Gretchen       Tidswell            gtidswell2z@cornell.edu       9
+## 109 109     Randene         Armall              rarmall30@myspace.com       6
+## 110 110        Kari        Kobiela           kkobiela31@people.com.cn       6
+## 111 111    Salvidor         Freeth            sfreeth32@123-reg.co.uk       2
+## 112 112       Agnes          Gorgl                agorgl33@oakley.com       4
+## 113 113     Donelle        Dollard               ddollard34@slate.com      10
+## 114 114     Garland       Matusiak                gmatusiak35@mapy.cz       3
+## 115 115       Flynn        Towlson      ftowlson36@huffingtonpost.com       6
+## 116 116       Ellen         Massel           emassel37@whitehouse.gov       7
+## 117 117     Harwell         Cheine                hcheine38@wiley.com       6
+## 118 118     Blanche      Gawthorpe             bgawthorpe39@google.it       2
+## 119 119       Lorri          Pesak                   lpesak3a@cnn.com       1
+## 120 120        Brok        Tilling                 btilling3b@php.net       1
+## 121 121      Gracia        Wandtke    gwandtke3c@networksolutions.com       3
+## 122 122     Raimund       Fishlock        rfishlock3d@dailymail.co.uk       2
+## 123 123      Dulcie         Gilbey              dgilbey3e@cbsnews.com       9
+## 124 124     Alberik          Shill                 ashill3f@house.gov       8
+## 125 125       Britt          Croot                    bcroot3g@va.gov       3
+## 126 126    Mireille        Fideler                  mfideler3h@w3.org       5
+## 127 127        Knox       McSharry                kmcsharry3i@fda.gov       2
+## 128 128     Emmalyn         Gallon                   egallon3j@cbc.ca       7
+## 129 129       Benjy        Eskrigg        beskrigg3k@businessweek.com       6
+## 130 130      Vallie          Dyott        vdyott3l@simplemachines.org       9
+## 131 131    Shurwood         Bengle            sbengle3m@posterous.com       6
+## 132 132      Amalea          Rigts                    arigts3n@i2i.jp       7
+## 133 133  Dianemarie         Bennit      dbennit3o@businessinsider.com       8
+## 134 134       Abbey     Threadgill athreadgill3p@pagesperso-orange.fr       4
+## 135 135        Cale        Crosser            ccrosser3q@omniture.com       9
+## 136 136       Brant        Winscum               bwinscum3r@salon.com       8
+## 137 137           H         Gayler              hgayler3s@youtube.com       3
+## 138 138      Dagmar         Mathis              dmathis3t@plala.or.jp      10
+## 139 139       Salli          Caddy               scaddy3u@mozilla.org       6
+## 140 140   Konstanze      Floodgate               kfloodgate3v@nba.com      10
+## 141 141       Archy       Pocknoll          apocknoll3w@imageshack.us       8
+## 142 142      Scotti         Magson               smagson3x@utexas.edu       3
+## 143 143        Jody           Jina               jjina3y@netscape.com       6
+## 144 144     Renaldo       Kneeshaw           rkneeshaw3z@amazon.co.uk       9
+## 145 145        Avie        Megroff                 amegroff40@hhs.gov       9
+## 146 146       Carey      DelaField           cdelafield41@comsenz.com       7
+## 147 147      Odella    O'Fearguise         oofearguise42@multiply.com       1
+## 148 148       Willi        McBoyle                 wmcboyle43@dot.gov       4
+## 149 149        Dolf     Ghelerdini            dghelerdini44@ifeng.com       8
+## 150 150  Hieronymus       Cisneros          hcisneros45@bloomberg.com      10
+## 151 151      Derwin          Rings                 drings46@zdnet.com       4
+## 152 152     Claudia        Gresham           cgresham47@google.com.au       9
+## 153 153    Modestia         Uttley             muttley48@hatena.ne.jp       7
+## 154 154     Arnaldo        Gingles             agingles49@state.tx.us       8
+## 155 155      Wallie     Castellino              wcastellino4a@cnn.com       8
+## 156 156        Arne         Slides              aslides4b@dropbox.com       4
+## 157 157           P       Prescote                pprescote4c@fc2.com       3
+## 158 158    Karolina          Elvin                 kelvin4d@amazon.de       4
+## 159 159     Linnell        Merritt     lmerritt4e@constantcontact.com       7
+## 160 160        Jess        Purkess                 jpurkess4f@soup.io       7
+## 161 161     Leopold         Childs                 lchilds4g@digg.com       2
+## 162 162         Jan       Loughnan               jloughnan4h@admin.ch       6
+## 163 163       Pippy     Scotchford       pscotchford4i@opensource.org       9
+## 164 164      Norris          Soffe                  nsoffe4jstate.gov       4
+## 165 165       Miran         Poyzer               mpoyzer4k@amazon.com       1
+## 166 166       Tucky         Bulger                 tbulger4l@dmoz.org       7
+## 167 167       Elvis         Lendon             elendon4m@columbia.edu       2
+## 168 168      Nettie      Filyashin             nfilyashin4n@hexun.com       1
+## 169 169       Jinny       Tregenza              jtregenza4o@google.pl       9
+## 170 170      Aldwin         Hurler   ahurler4p@nationalgeographic.com       3
+## 171 171    Cordelie        Beckles              cbeckles4q@tumblr.com       9
+## 172 172        King       MacAlees                kmacalees4r@nba.com       4
+## 173 173      Vinson        Tuckley                vtuckley4s@xrea.com       1
+## 174 174       Hyatt        Mulvany            hmulvany4t@japanpost.jp       6
+## 175 175        Noll             Yu       nyu4u@nationalgeographic.com       1
+## 176 176         Ash        Grabban                 agrabban4v@fda.gov       4
+## 177 177         Lin        Shutler           lshutler4w@delicious.com       8
+## 178 178       Kevan Scotchbourouge        kscotchbourouge4x@goo.ne.jp       2
+## 179 179       Brion      Sebastian            bsebastian4y@rambler.ru       6
+## 180 180       Leigh     Mc Gaughey                 lmcgaughey4z@de.vu       7
+## 181 181         Art        Feehely             afeehely50@webnode.com       9
+## 182 182       Vivia         Birden                 vbirden51@webs.com       8
+## 183 183      Ranice         Beckey                   rbeckey52@goo.gl       2
+## 184 184       Bibby        Jurasek                 bjurasek53@usa.gov      10
+## 185 185           J           Spir                jspir54@example.com       3
+## 186 186       Tobey        Dulinty            tdulinty55@illinois.edu       3
+## 187 187      Marijn   Hessenthaler    mhessenthaler56@fastcompany.com       2
+## 188 188      Melany        O'Finan               mofinan57@ustream.tv      10
+## 189 189    Anderson     Bergstrand        abergstrand58@canalblog.com      10
+## 190 190      Laurie     Lanchester              llanchester59@mapy.cz       5
+## 191 191        Bary      Arrigucci             barrigucci5a@slate.com       1
+## 192 192       Welsh         Tourne              wtourne5b@twitpic.com       9
+## 193 193   Susanetta      Pulhoster                spulhoster5c@i2i.jp       4
+## 194 194           B        Horning              bhorning5d@oracle.com       3
+## 195 195       Emlen      Blackburn                 eblackburn5e@ow.ly       6
+## 196 196       Arlin        Chismon                 achismon5f@last.fm      10
+## 197 197         Dun         Haward             dhaward5g@illinois.edu       2
+## 198 198        Cart         Hadlee          chadlee5h@livejournal.com       3
+## 199 199        Deny        Nutbeem              dnutbeem5i@weebly.com       4
+## 200 200       Brett         Fasset            bfasset5j@canalblog.com       7
+\end{verbatim}
+
+Retrieving records for all employees but this time adding a
+\texttt{full\_name} field.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{dbGetQuery}\NormalTok{(db_connect,}
+\StringTok{"SELECT CONCAT(first_name, last_name) AS full_name,}
+\StringTok{* FROM employees"}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##               full_name  id  first_name      last_name
+## 1           TabbyLesley   1       Tabby         Lesley
+## 2           WallieEdson   2      Wallie          Edson
+## 3        BunnieDi Maria   3      Bunnie       Di Maria
+## 4       HarrisCondliffe   4      Harris      Condliffe
+## 5            LydiaShout   5       Lydia          Shout
+## 6             GayelFear   6       Gayel           Fear
+## 7         MildridPinney   7     Mildrid         Pinney
+## 8             SMathevet   8           S       Mathevet
+## 9           CrinHollyar   9        Crin        Hollyar
+## 10       PalmerDi Nisco  10      Palmer       Di Nisco
+## 11         AdelindShout  11     Adelind          Shout
+## 12           TrinaPolet  12       Trina          Polet
+## 13     JasmineTuminelli  13     Jasmine      Tuminelli
+## 14       SaritaFarenden  14      Sarita       Farenden
+## 15           DavinaCory  15      Davina           Cory
+## 16      HubertoBlockley  16     Huberto       Blockley
+## 17         SaunchoPeake  17     Sauncho          Peake
+## 18      OreliaPassfield  18      Orelia      Passfield
+## 19        WandaLardiner  19       Wanda       Lardiner
+## 20       BennettHarvatt  20     Bennett        Harvatt
+## 21              DProven  21           D         Proven
+## 22          PyotrLantry  22       Pyotr         Lantry
+## 23         BrennaBelden  23      Brenna         Belden
+## 24         DoretteAngel  24     Dorette          Angel
+## 25      GregorioBrymham  25    Gregorio        Brymham
+## 26       JayneCrankhorn  26       Jayne      Crankhorn
+## 27            HildyMain  27       Hildy           Main
+## 28           LionelNoli  28      Lionel           Noli
+## 29       RockwellChasen  29    Rockwell         Chasen
+## 30         RianonFulkes  30      Rianon         Fulkes
+## 31    AnnecorinneMerton  31 Annecorinne         Merton
+## 32      ImogenHovington  32      Imogen      Hovington
+## 33       DorellaCrowden  33     Dorella        Crowden
+## 34      MontgomeryLyard  34  Montgomery          Lyard
+## 35         NoachHollyer  35       Noach        Hollyer
+## 36        AsiaHatherill  36        Asia      Hatherill
+## 37      WilfridChristal  37     Wilfrid       Christal
+## 38   JenicaVan Der Hoog  38      Jenica   Van Der Hoog
+## 39         HollisSevior  39      Hollis         Sevior
+## 40          MyScripture  40          My      Scripture
+## 41     NevilleRushworth  41     Neville      Rushworth
+## 42        TraceeFrankes  42      Tracee        Frankes
+## 43           LillaEllor  43       Lilla          Ellor
+## 44      BrittneBrislawn  44     Brittne       Brislawn
+## 45       TallulahCanedo  45    Tallulah         Canedo
+## 46      GrannieIskowicz  46     Grannie       Iskowicz
+## 47          BardeTourot  47       Barde         Tourot
+## 48         SalRockcliff  48         Sal      Rockcliff
+## 49     ChestonReichardt  49     Cheston      Reichardt
+## 50        RickertFearns  50     Rickert         Fearns
+## 51        WashHannaford  51        Wash      Hannaford
+## 52        ZondraElphick  52      Zondra        Elphick
+## 53       CornallTempest  53     Cornall        Tempest
+## 54     MarcellineJahnke  54  Marcelline         Jahnke
+## 55         LinneaBerger  55      Linnea         Berger
+## 56             JSatcher  56           J        Satcher
+## 57         LiliaDucarne  57       Lilia        Ducarne
+## 58  IngaborgPocklington  58    Ingaborg    Pocklington
+## 59    GuendolenMorshead  59   Guendolen       Morshead
+## 60     OsbournDanzelman  60     Osbourn      Danzelman
+## 61        SachaMeredyth  61       Sacha       Meredyth
+## 62            DukyShord  62        Duky          Shord
+## 63           DorieBains  63       Dorie          Bains
+## 64      AdrianMcQuillin  64      Adrian      McQuillin
+## 65     AlbertinaAnespie  65   Albertina        Anespie
+## 66        CrystalCotton  66     Crystal         Cotton
+## 67        LeeseLinstead  67       Leese       Linstead
+## 68        LoriGiorgioni  68        Lori      Giorgioni
+## 69         SammyDebrick  69       Sammy        Debrick
+## 70        IsadorSneaker  70      Isador        Sneaker
+## 71       EvaniaRobjents  71      Evania       Robjents
+## 72      SammyMuggleston  72       Sammy     Muggleston
+## 73        StearneEckert  73     Stearne         Eckert
+## 74      JanennaGallaher  74     Janenna       Gallaher
+## 75          VitaMunnery  75        Vita        Munnery
+## 76        ShannonSpalls  76     Shannon         Spalls
+## 77      DanellaRenzullo  77     Danella       Renzullo
+## 78           RomanAbazi  78       Roman          Abazi
+## 79          ArlineUpton  79      Arline          Upton
+## 80          BonnyRawsen  80       Bonny         Rawsen
+## 81   ChristynaCalbreath  81   Christyna      Calbreath
+## 82       MaxieRisebarer  82       Maxie      Risebarer
+## 83         IanBlonfield  83         Ian      Blonfield
+## 84         CullenMcGown  84      Cullen         McGown
+## 85       PersisTolhurst  85      Persis       Tolhurst
+## 86      NoreneFilchagin  86      Norene      Filchagin
+## 87        LatiaMcKeggie  87       Latia       McKeggie
+## 88        JoelieRuberry  88      Joelie        Ruberry
+## 89       KristaLebreton  89      Krista       Lebreton
+## 90        TitusSpurgeon  90       Titus       Spurgeon
+## 91      JonathonMcGlynn  91    Jonathon        McGlynn
+## 92        AstrixGeldard  92      Astrix        Geldard
+## 93              TRegina  93           T         Regina
+## 94    EmanueleGeorgescu  94    Emanuele      Georgescu
+## 95         JozefYerrill  95       Jozef        Yerrill
+## 96          JanaBygrave  96        Jana        Bygrave
+## 97         RabiEllsbury  97        Rabi       Ellsbury
+## 98      WestbrookUbanks  98   Westbrook         Ubanks
+## 99        JeanneDimmick  99      Jeanne        Dimmick
+## 100       TobyBlaisdell 100        Toby      Blaisdell
+## 101      KathryneToomey 101    Kathryne         Toomey
+## 102        IggieGriffey 102       Iggie        Griffey
+## 103     ConcettinaScown 103  Concettina          Scown
+## 104       GiulioHaliday 104      Giulio        Haliday
+## 105      MaireSkiplorne 105       Maire      Skiplorne
+## 106        IlseBarltrop 106        Ilse       Barltrop
+## 107     AlejoaBroomhead 107      Alejoa      Broomhead
+## 108    GretchenTidswell 108    Gretchen       Tidswell
+## 109       RandeneArmall 109     Randene         Armall
+## 110         KariKobiela 110        Kari        Kobiela
+## 111      SalvidorFreeth 111    Salvidor         Freeth
+## 112          AgnesGorgl 112       Agnes          Gorgl
+## 113      DonelleDollard 113     Donelle        Dollard
+## 114     GarlandMatusiak 114     Garland       Matusiak
+## 115        FlynnTowlson 115       Flynn        Towlson
+## 116         EllenMassel 116       Ellen         Massel
+## 117       HarwellCheine 117     Harwell         Cheine
+## 118    BlancheGawthorpe 118     Blanche      Gawthorpe
+## 119          LorriPesak 119       Lorri          Pesak
+## 120         BrokTilling 120        Brok        Tilling
+## 121       GraciaWandtke 121      Gracia        Wandtke
+## 122     RaimundFishlock 122     Raimund       Fishlock
+## 123        DulcieGilbey 123      Dulcie         Gilbey
+## 124        AlberikShill 124     Alberik          Shill
+## 125          BrittCroot 125       Britt          Croot
+## 126     MireilleFideler 126    Mireille        Fideler
+## 127        KnoxMcSharry 127        Knox       McSharry
+## 128       EmmalynGallon 128     Emmalyn         Gallon
+## 129        BenjyEskrigg 129       Benjy        Eskrigg
+## 130         VallieDyott 130      Vallie          Dyott
+## 131      ShurwoodBengle 131    Shurwood         Bengle
+## 132         AmaleaRigts 132      Amalea          Rigts
+## 133    DianemarieBennit 133  Dianemarie         Bennit
+## 134     AbbeyThreadgill 134       Abbey     Threadgill
+## 135         CaleCrosser 135        Cale        Crosser
+## 136        BrantWinscum 136       Brant        Winscum
+## 137             HGayler 137           H         Gayler
+## 138        DagmarMathis 138      Dagmar         Mathis
+## 139          SalliCaddy 139       Salli          Caddy
+## 140  KonstanzeFloodgate 140   Konstanze      Floodgate
+## 141       ArchyPocknoll 141       Archy       Pocknoll
+## 142        ScottiMagson 142      Scotti         Magson
+## 143            JodyJina 143        Jody           Jina
+## 144     RenaldoKneeshaw 144     Renaldo       Kneeshaw
+## 145         AvieMegroff 145        Avie        Megroff
+## 146      CareyDelaField 146       Carey      DelaField
+## 147   OdellaO'Fearguise 147      Odella    O'Fearguise
+## 148        WilliMcBoyle 148       Willi        McBoyle
+## 149      DolfGhelerdini 149        Dolf     Ghelerdini
+## 150  HieronymusCisneros 150  Hieronymus       Cisneros
+## 151         DerwinRings 151      Derwin          Rings
+## 152      ClaudiaGresham 152     Claudia        Gresham
+## 153      ModestiaUttley 153    Modestia         Uttley
+## 154      ArnaldoGingles 154     Arnaldo        Gingles
+## 155    WallieCastellino 155      Wallie     Castellino
+## 156          ArneSlides 156        Arne         Slides
+## 157           PPrescote 157           P       Prescote
+## 158       KarolinaElvin 158    Karolina          Elvin
+## 159      LinnellMerritt 159     Linnell        Merritt
+## 160         JessPurkess 160        Jess        Purkess
+## 161       LeopoldChilds 161     Leopold         Childs
+## 162         JanLoughnan 162         Jan       Loughnan
+## 163     PippyScotchford 163       Pippy     Scotchford
+## 164         NorrisSoffe 164      Norris          Soffe
+## 165         MiranPoyzer 165       Miran         Poyzer
+## 166         TuckyBulger 166       Tucky         Bulger
+## 167         ElvisLendon 167       Elvis         Lendon
+## 168     NettieFilyashin 168      Nettie      Filyashin
+## 169       JinnyTregenza 169       Jinny       Tregenza
+## 170        AldwinHurler 170      Aldwin         Hurler
+## 171     CordelieBeckles 171    Cordelie        Beckles
+## 172        KingMacAlees 172        King       MacAlees
+## 173       VinsonTuckley 173      Vinson        Tuckley
+## 174        HyattMulvany 174       Hyatt        Mulvany
+## 175              NollYu 175        Noll             Yu
+## 176          AshGrabban 176         Ash        Grabban
+## 177          LinShutler 177         Lin        Shutler
+## 178 KevanScotchbourouge 178       Kevan Scotchbourouge
+## 179      BrionSebastian 179       Brion      Sebastian
+## 180     LeighMc Gaughey 180       Leigh     Mc Gaughey
+## 181          ArtFeehely 181         Art        Feehely
+## 182         ViviaBirden 182       Vivia         Birden
+## 183        RaniceBeckey 183      Ranice         Beckey
+## 184        BibbyJurasek 184       Bibby        Jurasek
+## 185               JSpir 185           J           Spir
+## 186        TobeyDulinty 186       Tobey        Dulinty
+## 187  MarijnHessenthaler 187      Marijn   Hessenthaler
+## 188       MelanyO'Finan 188      Melany        O'Finan
+## 189  AndersonBergstrand 189    Anderson     Bergstrand
+## 190    LaurieLanchester 190      Laurie     Lanchester
+## 191       BaryArrigucci 191        Bary      Arrigucci
+## 192         WelshTourne 192       Welsh         Tourne
+## 193  SusanettaPulhoster 193   Susanetta      Pulhoster
+## 194            BHorning 194           B        Horning
+## 195      EmlenBlackburn 195       Emlen      Blackburn
+## 196        ArlinChismon 196       Arlin        Chismon
+## 197           DunHaward 197         Dun         Haward
+## 198          CartHadlee 198        Cart         Hadlee
+## 199         DenyNutbeem 199        Deny        Nutbeem
+## 200         BrettFasset 200       Brett         Fasset
+##                                  email team_id
+## 1               tlesley0@shinystat.com       4
+## 2                                 <NA>       1
+## 3            bdimaria2@list-manage.com       3
+## 4               hcondliffe3@apache.org       1
+## 5                   lshout4@flavors.me      10
+## 6                  gfear5@columbia.edu       7
+## 7                mpinney6@hubpages.com       6
+## 8               smathevet7@state.tx.us       3
+## 9             chollyar8@vistaprint.com       1
+## 10               pdinisco9@behance.net       3
+## 11                  ashouta@tripod.com       4
+## 12            tpoletb@businessweek.com      10
+## 13                jtuminellic@etsy.com       1
+## 14                sfarendend@topsy.com       1
+## 15                       dcorye@w3.org      10
+## 16                 hblockleyf@fema.gov       1
+## 17                    speakeg@digg.com       9
+## 18      opassfieldh@chicagotribune.com       1
+## 19                wlardineri@amazon.de       7
+## 20            bharvattj@shutterfly.com       1
+## 21              dprovenk@moonfruit.com       3
+## 22                                <NA>       2
+## 23                   bbeldenm@nasa.gov       8
+## 24                   dangeln@weibo.com       3
+## 25           gbrymhamo@list-manage.com       3
+## 26        jcrankhornp@chronoengine.com       7
+## 27                hmainq@over-blog.com       8
+## 28                   lnolir@joomla.org       9
+## 29                rchasens@cornell.edu       3
+## 30             rfulkest@deviantart.com       9
+## 31              amertonu@clickbank.net       8
+## 32            ihovingtonv@hubpages.com       1
+## 33                   dcrowdenw@pbs.org       9
+## 34              mlyardx@washington.edu       1
+## 35                    nhollyery@i2i.jp       5
+## 36           ahatherillz *at* java.com       9
+## 37              wchristal10@oracle.com       9
+## 38       jvanderhoog11@photobucket.com      10
+## 39               hsevior12@archive.org       4
+## 40          mscripture13@geocities.com       1
+## 41            nrushworth14@harvard.edu       6
+## 42              tfrankes15@squidoo.com       9
+## 43                    lellor16@gnu.org       9
+## 44             bbrislawn17@webnode.com       1
+## 45          tcanedo18@wunderground.com       8
+## 46                  giskowicz19@un.org       9
+## 47             btourot1a@123-reg.co.uk       2
+## 48           srockcliff1b@china.com.cn       3
+## 49                creichardt1c@ted.com       8
+## 50               rfearns1d@yahoo.co.jp       7
+## 51               whannaford1e@cnet.com       7
+## 52           zelphick1f@soundcloud.com       9
+## 53             ctempest1g@geocities.jp       6
+## 54                   mjahnke1h@fc2.com       4
+## 55                 lberger1i@google.fr       2
+## 56   jsatcher1j@networkadvertising.org       3
+## 57                  lducarne1k@who.int      10
+## 58            ipocklington1l@ocn.ne.jp       7
+## 59                gmorshead1m@blog.com       1
+## 60              odanzelman1n@google.cn      10
+## 61             smeredyth1o@state.tx.us       1
+## 62               dshord1p@edublogs.org      10
+## 63               dbains1q@buzzfeed.com       5
+## 64         amcquillin1r@soundcloud.com       8
+## 65             aanespie1s@buzzfeed.com       4
+## 66                ccotton1t@cpanel.net       2
+## 67              llinstead1u@github.com       3
+## 68         lgiorgioni1v@infoseek.co.jp       6
+## 69                 sdebrick1w@usgs.gov       5
+## 70             isneaker1x@amazon.co.uk       5
+## 71              erobjents1y@cpanel.net      10
+## 72            smuggleston1z@dion.ne.jp       5
+## 73             seckert20@shinystat.com       5
+## 74             jgallaher21@walmart.com       2
+## 75               vmunnery22@tumblr.com       3
+## 76                    sspalls23@qq.com       9
+## 77                 drenzullo24@soup.io       5
+## 78                  rabazi25@google.it       2
+## 79           aupton26@domainmarket.com       3
+## 80               brawsen27@pcworld.com       1
+## 81                ccalbreath28@free.fr       3
+## 82               mrisebarer29@jugem.jp       1
+## 83               iblonfield2a admin.ch       2
+## 84          cmcgown2b@sciencedaily.com       8
+## 85             ptolhurst2c@plala.or.jp       6
+## 86     nfilchagin2d@huffingtonpost.com       4
+## 87              lmckeggie2e@oakley.com       9
+## 88                jruberry2f@yandex.ru       1
+## 89           klebreton2g@clickbank.net       6
+## 90                tspurgeon2h@sohu.com       5
+## 91                  jmcglynn2i@fc2.com       9
+## 92              ageldard2j@behance.net       9
+## 93                 tregina2k@about.com       1
+## 94               egeorgescu2l@1688.com      10
+## 95             jyerrill2m@yolasite.com       6
+## 96         jbygrave2n@surveymonkey.com       5
+## 97            rellsbury2o@facebook.com       6
+## 98               wubanks2p@youtube.com       8
+## 99                jdimmick2q@wikia.com       6
+## 100                               <NA>       7
+## 101      ktoomey2s@businessinsider.com       8
+## 102              igriffey2t@toplist.cz       4
+## 103              cscown2u@bandcamp.com       9
+## 104           ghaliday2v@moonfruit.com       5
+## 105               mskiplorne2w@com.com       6
+## 106          ibarltrop2xmacromedia.com       4
+## 107            abroomhead2y@meetup.com       9
+## 108            gtidswell2z@cornell.edu       9
+## 109              rarmall30@myspace.com       6
+## 110           kkobiela31@people.com.cn       6
+## 111            sfreeth32@123-reg.co.uk       2
+## 112                agorgl33@oakley.com       4
+## 113               ddollard34@slate.com      10
+## 114                gmatusiak35@mapy.cz       3
+## 115      ftowlson36@huffingtonpost.com       6
+## 116           emassel37@whitehouse.gov       7
+## 117                hcheine38@wiley.com       6
+## 118             bgawthorpe39@google.it       2
+## 119                   lpesak3a@cnn.com       1
+## 120                 btilling3b@php.net       1
+## 121    gwandtke3c@networksolutions.com       3
+## 122        rfishlock3d@dailymail.co.uk       2
+## 123              dgilbey3e@cbsnews.com       9
+## 124                 ashill3f@house.gov       8
+## 125                    bcroot3g@va.gov       3
+## 126                  mfideler3h@w3.org       5
+## 127                kmcsharry3i@fda.gov       2
+## 128                   egallon3j@cbc.ca       7
+## 129        beskrigg3k@businessweek.com       6
+## 130        vdyott3l@simplemachines.org       9
+## 131            sbengle3m@posterous.com       6
+## 132                    arigts3n@i2i.jp       7
+## 133      dbennit3o@businessinsider.com       8
+## 134 athreadgill3p@pagesperso-orange.fr       4
+## 135            ccrosser3q@omniture.com       9
+## 136               bwinscum3r@salon.com       8
+## 137              hgayler3s@youtube.com       3
+## 138              dmathis3t@plala.or.jp      10
+## 139               scaddy3u@mozilla.org       6
+## 140               kfloodgate3v@nba.com      10
+## 141          apocknoll3w@imageshack.us       8
+## 142               smagson3x@utexas.edu       3
+## 143               jjina3y@netscape.com       6
+## 144           rkneeshaw3z@amazon.co.uk       9
+## 145                 amegroff40@hhs.gov       9
+## 146           cdelafield41@comsenz.com       7
+## 147         oofearguise42@multiply.com       1
+## 148                 wmcboyle43@dot.gov       4
+## 149            dghelerdini44@ifeng.com       8
+## 150          hcisneros45@bloomberg.com      10
+## 151                 drings46@zdnet.com       4
+## 152           cgresham47@google.com.au       9
+## 153             muttley48@hatena.ne.jp       7
+## 154             agingles49@state.tx.us       8
+## 155              wcastellino4a@cnn.com       8
+## 156              aslides4b@dropbox.com       4
+## 157                pprescote4c@fc2.com       3
+## 158                 kelvin4d@amazon.de       4
+## 159     lmerritt4e@constantcontact.com       7
+## 160                 jpurkess4f@soup.io       7
+## 161                 lchilds4g@digg.com       2
+## 162               jloughnan4h@admin.ch       6
+## 163       pscotchford4i@opensource.org       9
+## 164                  nsoffe4jstate.gov       4
+## 165               mpoyzer4k@amazon.com       1
+## 166                 tbulger4l@dmoz.org       7
+## 167             elendon4m@columbia.edu       2
+## 168             nfilyashin4n@hexun.com       1
+## 169              jtregenza4o@google.pl       9
+## 170   ahurler4p@nationalgeographic.com       3
+## 171              cbeckles4q@tumblr.com       9
+## 172                kmacalees4r@nba.com       4
+## 173                vtuckley4s@xrea.com       1
+## 174            hmulvany4t@japanpost.jp       6
+## 175       nyu4u@nationalgeographic.com       1
+## 176                 agrabban4v@fda.gov       4
+## 177           lshutler4w@delicious.com       8
+## 178        kscotchbourouge4x@goo.ne.jp       2
+## 179            bsebastian4y@rambler.ru       6
+## 180                 lmcgaughey4z@de.vu       7
+## 181             afeehely50@webnode.com       9
+## 182                 vbirden51@webs.com       8
+## 183                   rbeckey52@goo.gl       2
+## 184                 bjurasek53@usa.gov      10
+## 185                jspir54@example.com       3
+## 186            tdulinty55@illinois.edu       3
+## 187    mhessenthaler56@fastcompany.com       2
+## 188               mofinan57@ustream.tv      10
+## 189        abergstrand58@canalblog.com      10
+## 190              llanchester59@mapy.cz       5
+## 191             barrigucci5a@slate.com       1
+## 192              wtourne5b@twitpic.com       9
+## 193                spulhoster5c@i2i.jp       4
+## 194              bhorning5d@oracle.com       3
+## 195                 eblackburn5e@ow.ly       6
+## 196                 achismon5f@last.fm      10
+## 197             dhaward5g@illinois.edu       2
+## 198          chadlee5h@livejournal.com       3
+## 199              dnutbeem5i@weebly.com       4
+## 200            bfasset5j@canalblog.com       7
+\end{verbatim}
+
+Retrieving details of all employees and this time listing
+\texttt{team\_name} instead of \texttt{team\_id}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#Using INNER JOIN on list of team names in relational database without creating aliases (for clarity)}
+
+\KeywordTok{dbGetQuery}\NormalTok{(db_connect,}
+\StringTok{"SELECT teams.name, employees.first_name, employees.last_name, employees.email }
+\StringTok{FROM employees INNER JOIN teams}
+\StringTok{on employees.team_id = teams.id"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##               name  first_name      last_name
+## 1      Risk Team 2       Tabby         Lesley
+## 2     Audit Team 1      Wallie          Edson
+## 3      Risk Team 1      Bunnie       Di Maria
+## 4     Audit Team 1      Harris      Condliffe
+## 5        Corporate       Lydia          Shout
+## 6      Data Team 1       Gayel           Fear
+## 7    Risk Escalate     Mildrid         Pinney
+## 8      Risk Team 1           S       Mathevet
+## 9     Audit Team 1        Crin        Hollyar
+## 10     Risk Team 1      Palmer       Di Nisco
+## 11     Risk Team 2     Adelind          Shout
+## 12       Corporate       Trina          Polet
+## 13    Audit Team 1     Jasmine      Tuminelli
+## 14    Audit Team 1      Sarita       Farenden
+## 15       Corporate      Davina           Cory
+## 16    Audit Team 1     Huberto       Blockley
+## 17   Data Escalate     Sauncho          Peake
+## 18    Audit Team 1      Orelia      Passfield
+## 19     Data Team 1       Wanda       Lardiner
+## 20    Audit Team 1     Bennett        Harvatt
+## 21     Risk Team 1           D         Proven
+## 22    Audit Team 2       Pyotr         Lantry
+## 23     Data Team 2      Brenna         Belden
+## 24     Risk Team 1     Dorette          Angel
+## 25     Risk Team 1    Gregorio        Brymham
+## 26     Data Team 1       Jayne      Crankhorn
+## 27     Data Team 2       Hildy           Main
+## 28   Data Escalate      Lionel           Noli
+## 29     Risk Team 1    Rockwell         Chasen
+## 30   Data Escalate      Rianon         Fulkes
+## 31     Data Team 2 Annecorinne         Merton
+## 32    Audit Team 1      Imogen      Hovington
+## 33   Data Escalate     Dorella        Crowden
+## 34    Audit Team 1  Montgomery          Lyard
+## 35  Audit Escalate       Noach        Hollyer
+## 36   Data Escalate        Asia      Hatherill
+## 37   Data Escalate     Wilfrid       Christal
+## 38       Corporate      Jenica   Van Der Hoog
+## 39     Risk Team 2      Hollis         Sevior
+## 40    Audit Team 1          My      Scripture
+## 41   Risk Escalate     Neville      Rushworth
+## 42   Data Escalate      Tracee        Frankes
+## 43   Data Escalate       Lilla          Ellor
+## 44    Audit Team 1     Brittne       Brislawn
+## 45     Data Team 2    Tallulah         Canedo
+## 46   Data Escalate     Grannie       Iskowicz
+## 47    Audit Team 2       Barde         Tourot
+## 48     Risk Team 1         Sal      Rockcliff
+## 49     Data Team 2     Cheston      Reichardt
+## 50     Data Team 1     Rickert         Fearns
+## 51     Data Team 1        Wash      Hannaford
+## 52   Data Escalate      Zondra        Elphick
+## 53   Risk Escalate     Cornall        Tempest
+## 54     Risk Team 2  Marcelline         Jahnke
+## 55    Audit Team 2      Linnea         Berger
+## 56     Risk Team 1           J        Satcher
+## 57       Corporate       Lilia        Ducarne
+## 58     Data Team 1    Ingaborg    Pocklington
+## 59    Audit Team 1   Guendolen       Morshead
+## 60       Corporate     Osbourn      Danzelman
+## 61    Audit Team 1       Sacha       Meredyth
+## 62       Corporate        Duky          Shord
+## 63  Audit Escalate       Dorie          Bains
+## 64     Data Team 2      Adrian      McQuillin
+## 65     Risk Team 2   Albertina        Anespie
+## 66    Audit Team 2     Crystal         Cotton
+## 67     Risk Team 1       Leese       Linstead
+## 68   Risk Escalate        Lori      Giorgioni
+## 69  Audit Escalate       Sammy        Debrick
+## 70  Audit Escalate      Isador        Sneaker
+## 71       Corporate      Evania       Robjents
+## 72  Audit Escalate       Sammy     Muggleston
+## 73  Audit Escalate     Stearne         Eckert
+## 74    Audit Team 2     Janenna       Gallaher
+## 75     Risk Team 1        Vita        Munnery
+## 76   Data Escalate     Shannon         Spalls
+## 77  Audit Escalate     Danella       Renzullo
+## 78    Audit Team 2       Roman          Abazi
+## 79     Risk Team 1      Arline          Upton
+## 80    Audit Team 1       Bonny         Rawsen
+## 81     Risk Team 1   Christyna      Calbreath
+## 82    Audit Team 1       Maxie      Risebarer
+## 83    Audit Team 2         Ian      Blonfield
+## 84     Data Team 2      Cullen         McGown
+## 85   Risk Escalate      Persis       Tolhurst
+## 86     Risk Team 2      Norene      Filchagin
+## 87   Data Escalate       Latia       McKeggie
+## 88    Audit Team 1      Joelie        Ruberry
+## 89   Risk Escalate      Krista       Lebreton
+## 90  Audit Escalate       Titus       Spurgeon
+## 91   Data Escalate    Jonathon        McGlynn
+## 92   Data Escalate      Astrix        Geldard
+## 93    Audit Team 1           T         Regina
+## 94       Corporate    Emanuele      Georgescu
+## 95   Risk Escalate       Jozef        Yerrill
+## 96  Audit Escalate        Jana        Bygrave
+## 97   Risk Escalate        Rabi       Ellsbury
+## 98     Data Team 2   Westbrook         Ubanks
+## 99   Risk Escalate      Jeanne        Dimmick
+## 100    Data Team 1        Toby      Blaisdell
+## 101    Data Team 2    Kathryne         Toomey
+## 102    Risk Team 2       Iggie        Griffey
+## 103  Data Escalate  Concettina          Scown
+## 104 Audit Escalate      Giulio        Haliday
+## 105  Risk Escalate       Maire      Skiplorne
+## 106    Risk Team 2        Ilse       Barltrop
+## 107  Data Escalate      Alejoa      Broomhead
+## 108  Data Escalate    Gretchen       Tidswell
+## 109  Risk Escalate     Randene         Armall
+## 110  Risk Escalate        Kari        Kobiela
+## 111   Audit Team 2    Salvidor         Freeth
+## 112    Risk Team 2       Agnes          Gorgl
+## 113      Corporate     Donelle        Dollard
+## 114    Risk Team 1     Garland       Matusiak
+## 115  Risk Escalate       Flynn        Towlson
+## 116    Data Team 1       Ellen         Massel
+## 117  Risk Escalate     Harwell         Cheine
+## 118   Audit Team 2     Blanche      Gawthorpe
+## 119   Audit Team 1       Lorri          Pesak
+## 120   Audit Team 1        Brok        Tilling
+## 121    Risk Team 1      Gracia        Wandtke
+## 122   Audit Team 2     Raimund       Fishlock
+## 123  Data Escalate      Dulcie         Gilbey
+## 124    Data Team 2     Alberik          Shill
+## 125    Risk Team 1       Britt          Croot
+## 126 Audit Escalate    Mireille        Fideler
+## 127   Audit Team 2        Knox       McSharry
+## 128    Data Team 1     Emmalyn         Gallon
+## 129  Risk Escalate       Benjy        Eskrigg
+## 130  Data Escalate      Vallie          Dyott
+## 131  Risk Escalate    Shurwood         Bengle
+## 132    Data Team 1      Amalea          Rigts
+## 133    Data Team 2  Dianemarie         Bennit
+## 134    Risk Team 2       Abbey     Threadgill
+## 135  Data Escalate        Cale        Crosser
+## 136    Data Team 2       Brant        Winscum
+## 137    Risk Team 1           H         Gayler
+## 138      Corporate      Dagmar         Mathis
+## 139  Risk Escalate       Salli          Caddy
+## 140      Corporate   Konstanze      Floodgate
+## 141    Data Team 2       Archy       Pocknoll
+## 142    Risk Team 1      Scotti         Magson
+## 143  Risk Escalate        Jody           Jina
+## 144  Data Escalate     Renaldo       Kneeshaw
+## 145  Data Escalate        Avie        Megroff
+## 146    Data Team 1       Carey      DelaField
+## 147   Audit Team 1      Odella    O'Fearguise
+## 148    Risk Team 2       Willi        McBoyle
+## 149    Data Team 2        Dolf     Ghelerdini
+## 150      Corporate  Hieronymus       Cisneros
+## 151    Risk Team 2      Derwin          Rings
+## 152  Data Escalate     Claudia        Gresham
+## 153    Data Team 1    Modestia         Uttley
+## 154    Data Team 2     Arnaldo        Gingles
+## 155    Data Team 2      Wallie     Castellino
+## 156    Risk Team 2        Arne         Slides
+## 157    Risk Team 1           P       Prescote
+## 158    Risk Team 2    Karolina          Elvin
+## 159    Data Team 1     Linnell        Merritt
+## 160    Data Team 1        Jess        Purkess
+## 161   Audit Team 2     Leopold         Childs
+## 162  Risk Escalate         Jan       Loughnan
+## 163  Data Escalate       Pippy     Scotchford
+## 164    Risk Team 2      Norris          Soffe
+## 165   Audit Team 1       Miran         Poyzer
+## 166    Data Team 1       Tucky         Bulger
+## 167   Audit Team 2       Elvis         Lendon
+## 168   Audit Team 1      Nettie      Filyashin
+## 169  Data Escalate       Jinny       Tregenza
+## 170    Risk Team 1      Aldwin         Hurler
+## 171  Data Escalate    Cordelie        Beckles
+## 172    Risk Team 2        King       MacAlees
+## 173   Audit Team 1      Vinson        Tuckley
+## 174  Risk Escalate       Hyatt        Mulvany
+## 175   Audit Team 1        Noll             Yu
+## 176    Risk Team 2         Ash        Grabban
+## 177    Data Team 2         Lin        Shutler
+## 178   Audit Team 2       Kevan Scotchbourouge
+## 179  Risk Escalate       Brion      Sebastian
+## 180    Data Team 1       Leigh     Mc Gaughey
+## 181  Data Escalate         Art        Feehely
+## 182    Data Team 2       Vivia         Birden
+## 183   Audit Team 2      Ranice         Beckey
+## 184      Corporate       Bibby        Jurasek
+## 185    Risk Team 1           J           Spir
+## 186    Risk Team 1       Tobey        Dulinty
+## 187   Audit Team 2      Marijn   Hessenthaler
+## 188      Corporate      Melany        O'Finan
+## 189      Corporate    Anderson     Bergstrand
+## 190 Audit Escalate      Laurie     Lanchester
+## 191   Audit Team 1        Bary      Arrigucci
+## 192  Data Escalate       Welsh         Tourne
+## 193    Risk Team 2   Susanetta      Pulhoster
+## 194    Risk Team 1           B        Horning
+## 195  Risk Escalate       Emlen      Blackburn
+## 196      Corporate       Arlin        Chismon
+## 197   Audit Team 2         Dun         Haward
+## 198    Risk Team 1        Cart         Hadlee
+## 199    Risk Team 2        Deny        Nutbeem
+## 200    Data Team 1       Brett         Fasset
+##                                  email
+## 1               tlesley0@shinystat.com
+## 2                                 <NA>
+## 3            bdimaria2@list-manage.com
+## 4               hcondliffe3@apache.org
+## 5                   lshout4@flavors.me
+## 6                  gfear5@columbia.edu
+## 7                mpinney6@hubpages.com
+## 8               smathevet7@state.tx.us
+## 9             chollyar8@vistaprint.com
+## 10               pdinisco9@behance.net
+## 11                  ashouta@tripod.com
+## 12            tpoletb@businessweek.com
+## 13                jtuminellic@etsy.com
+## 14                sfarendend@topsy.com
+## 15                       dcorye@w3.org
+## 16                 hblockleyf@fema.gov
+## 17                    speakeg@digg.com
+## 18      opassfieldh@chicagotribune.com
+## 19                wlardineri@amazon.de
+## 20            bharvattj@shutterfly.com
+## 21              dprovenk@moonfruit.com
+## 22                                <NA>
+## 23                   bbeldenm@nasa.gov
+## 24                   dangeln@weibo.com
+## 25           gbrymhamo@list-manage.com
+## 26        jcrankhornp@chronoengine.com
+## 27                hmainq@over-blog.com
+## 28                   lnolir@joomla.org
+## 29                rchasens@cornell.edu
+## 30             rfulkest@deviantart.com
+## 31              amertonu@clickbank.net
+## 32            ihovingtonv@hubpages.com
+## 33                   dcrowdenw@pbs.org
+## 34              mlyardx@washington.edu
+## 35                    nhollyery@i2i.jp
+## 36           ahatherillz *at* java.com
+## 37              wchristal10@oracle.com
+## 38       jvanderhoog11@photobucket.com
+## 39               hsevior12@archive.org
+## 40          mscripture13@geocities.com
+## 41            nrushworth14@harvard.edu
+## 42              tfrankes15@squidoo.com
+## 43                    lellor16@gnu.org
+## 44             bbrislawn17@webnode.com
+## 45          tcanedo18@wunderground.com
+## 46                  giskowicz19@un.org
+## 47             btourot1a@123-reg.co.uk
+## 48           srockcliff1b@china.com.cn
+## 49                creichardt1c@ted.com
+## 50               rfearns1d@yahoo.co.jp
+## 51               whannaford1e@cnet.com
+## 52           zelphick1f@soundcloud.com
+## 53             ctempest1g@geocities.jp
+## 54                   mjahnke1h@fc2.com
+## 55                 lberger1i@google.fr
+## 56   jsatcher1j@networkadvertising.org
+## 57                  lducarne1k@who.int
+## 58            ipocklington1l@ocn.ne.jp
+## 59                gmorshead1m@blog.com
+## 60              odanzelman1n@google.cn
+## 61             smeredyth1o@state.tx.us
+## 62               dshord1p@edublogs.org
+## 63               dbains1q@buzzfeed.com
+## 64         amcquillin1r@soundcloud.com
+## 65             aanespie1s@buzzfeed.com
+## 66                ccotton1t@cpanel.net
+## 67              llinstead1u@github.com
+## 68         lgiorgioni1v@infoseek.co.jp
+## 69                 sdebrick1w@usgs.gov
+## 70             isneaker1x@amazon.co.uk
+## 71              erobjents1y@cpanel.net
+## 72            smuggleston1z@dion.ne.jp
+## 73             seckert20@shinystat.com
+## 74             jgallaher21@walmart.com
+## 75               vmunnery22@tumblr.com
+## 76                    sspalls23@qq.com
+## 77                 drenzullo24@soup.io
+## 78                  rabazi25@google.it
+## 79           aupton26@domainmarket.com
+## 80               brawsen27@pcworld.com
+## 81                ccalbreath28@free.fr
+## 82               mrisebarer29@jugem.jp
+## 83               iblonfield2a admin.ch
+## 84          cmcgown2b@sciencedaily.com
+## 85             ptolhurst2c@plala.or.jp
+## 86     nfilchagin2d@huffingtonpost.com
+## 87              lmckeggie2e@oakley.com
+## 88                jruberry2f@yandex.ru
+## 89           klebreton2g@clickbank.net
+## 90                tspurgeon2h@sohu.com
+## 91                  jmcglynn2i@fc2.com
+## 92              ageldard2j@behance.net
+## 93                 tregina2k@about.com
+## 94               egeorgescu2l@1688.com
+## 95             jyerrill2m@yolasite.com
+## 96         jbygrave2n@surveymonkey.com
+## 97            rellsbury2o@facebook.com
+## 98               wubanks2p@youtube.com
+## 99                jdimmick2q@wikia.com
+## 100                               <NA>
+## 101      ktoomey2s@businessinsider.com
+## 102              igriffey2t@toplist.cz
+## 103              cscown2u@bandcamp.com
+## 104           ghaliday2v@moonfruit.com
+## 105               mskiplorne2w@com.com
+## 106          ibarltrop2xmacromedia.com
+## 107            abroomhead2y@meetup.com
+## 108            gtidswell2z@cornell.edu
+## 109              rarmall30@myspace.com
+## 110           kkobiela31@people.com.cn
+## 111            sfreeth32@123-reg.co.uk
+## 112                agorgl33@oakley.com
+## 113               ddollard34@slate.com
+## 114                gmatusiak35@mapy.cz
+## 115      ftowlson36@huffingtonpost.com
+## 116           emassel37@whitehouse.gov
+## 117                hcheine38@wiley.com
+## 118             bgawthorpe39@google.it
+## 119                   lpesak3a@cnn.com
+## 120                 btilling3b@php.net
+## 121    gwandtke3c@networksolutions.com
+## 122        rfishlock3d@dailymail.co.uk
+## 123              dgilbey3e@cbsnews.com
+## 124                 ashill3f@house.gov
+## 125                    bcroot3g@va.gov
+## 126                  mfideler3h@w3.org
+## 127                kmcsharry3i@fda.gov
+## 128                   egallon3j@cbc.ca
+## 129        beskrigg3k@businessweek.com
+## 130        vdyott3l@simplemachines.org
+## 131            sbengle3m@posterous.com
+## 132                    arigts3n@i2i.jp
+## 133      dbennit3o@businessinsider.com
+## 134 athreadgill3p@pagesperso-orange.fr
+## 135            ccrosser3q@omniture.com
+## 136               bwinscum3r@salon.com
+## 137              hgayler3s@youtube.com
+## 138              dmathis3t@plala.or.jp
+## 139               scaddy3u@mozilla.org
+## 140               kfloodgate3v@nba.com
+## 141          apocknoll3w@imageshack.us
+## 142               smagson3x@utexas.edu
+## 143               jjina3y@netscape.com
+## 144           rkneeshaw3z@amazon.co.uk
+## 145                 amegroff40@hhs.gov
+## 146           cdelafield41@comsenz.com
+## 147         oofearguise42@multiply.com
+## 148                 wmcboyle43@dot.gov
+## 149            dghelerdini44@ifeng.com
+## 150          hcisneros45@bloomberg.com
+## 151                 drings46@zdnet.com
+## 152           cgresham47@google.com.au
+## 153             muttley48@hatena.ne.jp
+## 154             agingles49@state.tx.us
+## 155              wcastellino4a@cnn.com
+## 156              aslides4b@dropbox.com
+## 157                pprescote4c@fc2.com
+## 158                 kelvin4d@amazon.de
+## 159     lmerritt4e@constantcontact.com
+## 160                 jpurkess4f@soup.io
+## 161                 lchilds4g@digg.com
+## 162               jloughnan4h@admin.ch
+## 163       pscotchford4i@opensource.org
+## 164                  nsoffe4jstate.gov
+## 165               mpoyzer4k@amazon.com
+## 166                 tbulger4l@dmoz.org
+## 167             elendon4m@columbia.edu
+## 168             nfilyashin4n@hexun.com
+## 169              jtregenza4o@google.pl
+## 170   ahurler4p@nationalgeographic.com
+## 171              cbeckles4q@tumblr.com
+## 172                kmacalees4r@nba.com
+## 173                vtuckley4s@xrea.com
+## 174            hmulvany4t@japanpost.jp
+## 175       nyu4u@nationalgeographic.com
+## 176                 agrabban4v@fda.gov
+## 177           lshutler4w@delicious.com
+## 178        kscotchbourouge4x@goo.ne.jp
+## 179            bsebastian4y@rambler.ru
+## 180                 lmcgaughey4z@de.vu
+## 181             afeehely50@webnode.com
+## 182                 vbirden51@webs.com
+## 183                   rbeckey52@goo.gl
+## 184                 bjurasek53@usa.gov
+## 185                jspir54@example.com
+## 186            tdulinty55@illinois.edu
+## 187    mhessenthaler56@fastcompany.com
+## 188               mofinan57@ustream.tv
+## 189        abergstrand58@canalblog.com
+## 190              llanchester59@mapy.cz
+## 191             barrigucci5a@slate.com
+## 192              wtourne5b@twitpic.com
+## 193                spulhoster5c@i2i.jp
+## 194              bhorning5d@oracle.com
+## 195                 eblackburn5e@ow.ly
+## 196                 achismon5f@last.fm
+## 197             dhaward5g@illinois.edu
+## 198          chadlee5h@livejournal.com
+## 199              dnutbeem5i@weebly.com
+## 200            bfasset5j@canalblog.com
+\end{verbatim}
+
+Breaking down number of employees per team.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{dbGetQuery}\NormalTok{(db_connect,}
+           \StringTok{"SELECT teams.name, COUNT(*)}
+\StringTok{           FROM teams LEFT JOIN employees}
+\StringTok{           on teams.id = employees.team_id}
+\StringTok{           GROUP BY teams.name}
+\StringTok{           ORDER BY COUNT(*) DESC"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##              name count
+## 1   Data Escalate    28
+## 2    Audit Team 1    26
+## 3     Risk Team 1    24
+## 4   Risk Escalate    22
+## 5     Risk Team 2    19
+## 6     Data Team 2    18
+## 7    Audit Team 2    17
+## 8     Data Team 1    17
+## 9       Corporate    17
+## 10 Audit Escalate    12
+## 11    Uncommitted     1
+\end{verbatim}
+
+AcmeCorp management wouldn't be able to email their employees easily if
+just using on this database as there are a lot of invalid email
+addresses there.
+
+Identifying these employees,
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# looking for `email` fields that don't contain @ or are empty}
+\KeywordTok{dbGetQuery}\NormalTok{(db_connect,}
+           \StringTok{"SELECT first_name, last_name, email}
+\StringTok{           FROM employees}
+\StringTok{           WHERE email NOT LIKE '%@%' OR email IS NULL"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   first_name last_name                     email
+## 1     Wallie     Edson                      <NA>
+## 2      Pyotr    Lantry                      <NA>
+## 3       Asia Hatherill ahatherillz *at* java.com
+## 4        Ian Blonfield     iblonfield2a admin.ch
+## 5       Toby Blaisdell                      <NA>
+## 6       Ilse  Barltrop ibarltrop2xmacromedia.com
+## 7     Norris     Soffe         nsoffe4jstate.gov
+\end{verbatim}
+
+Finding employee that gave most recent feedback
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{dbGetQuery}\NormalTok{(db_connect,}
+\StringTok{"SELECT feedbacks.date, employees.first_name, employees.last_name, feedbacks.message}
+\StringTok{FROM feedbacks LEFT JOIN employees ON feedbacks.employee_id = employees.id}
+\StringTok{   ORDER BY feedbacks.date DESC}
+\StringTok{   LIMIT 1}
+\StringTok{  "}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##         date first_name last_name                           message
+## 1 2019-06-26     Linnea    Berger Not any cons from my observation.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Could also have used}
+\CommentTok{# WHERE feedbacks.date = (SELECT MAX(date) FROM feedbacks)}
+\end{Highlighting}
+\end{Shaded}
+
+One of the teams has a problem with employees whose first\_name contains
+their first initial rather than their whole first name.
+
+Finding name of the team has the worst problem with this.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{dbGetQuery}\NormalTok{(db_connect,}
+\StringTok{"SELECT employees.first_name, employees.last_name, teams.name}
+\StringTok{FROM employees INNER JOIN teams}
+\StringTok{ON teams.id = employees.team_id}
+\StringTok{WHERE employees.first_name LIKE '_'"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   first_name last_name         name
+## 1          S  Mathevet  Risk Team 1
+## 2          D    Proven  Risk Team 1
+## 3          J   Satcher  Risk Team 1
+## 4          T    Regina Audit Team 1
+## 5          H    Gayler  Risk Team 1
+## 6          P  Prescote  Risk Team 1
+## 7          J      Spir  Risk Team 1
+## 8          B   Horning  Risk Team 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{dbGetQuery}\NormalTok{(db_connect,}
+\StringTok{"SELECT teams.name, count(teams.name)}
+\StringTok{FROM employees INNER JOIN teams}
+\StringTok{ON teams.id = employees.team_id}
+\StringTok{WHERE employees.first_name LIKE '_'}
+\StringTok{GROUP BY teams.name}
+\StringTok{ORDER BY count DESC NULLS LAST}
+\StringTok{LIMIT 1"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##          name count
+## 1 Risk Team 1     7
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#It's good practice to code out your database discconection first as a reminder.  Don't want to upset your colleagues by monopolising a connection if you're not using it.  Worth commenting it out to avoid disconnecting by accident though.}
+
+\KeywordTok{dbDisconnect}\NormalTok{(}\DataTypeTok{conn =}\NormalTok{ db_connect)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] TRUE
+\end{verbatim}
+
+\end{document}

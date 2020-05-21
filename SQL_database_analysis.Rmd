@@ -1,0 +1,306 @@
+---
+title: "SQL Project"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    number_sections: true
+    df_print: paged
+  pdf_document: default
+---
+
+<div class="blame">
+author: "Jonathan Lau"<br>
+</div>
+
+
+<hr>
+
+<br>
+<div class='emphasis'>
+
+
+# Project Overview
+*ACME Corporation - client database*<br>
+
+## Project outline
+• Basic analysis of stored data<br>
+• Quantitative analysis of emotional state of corporation based on stored `feedbacks`.
+• Practising coding best practice for R and SQL.
+
+## R Packages used
+• Keyring<br>
+• RPostgreSQL<br>
+
+## Description of data:
+• PostgreSQL database<br>
+• Contains three tables of information: details of `employees`, `teams` and `feedbacks`.<br>
+• `Feedbacks` is text detailing employees' positive and negative experiences at work.
+</div>
+<br>
+
+# Querying the SQL database
+
+## Creating a local PostgreSQL database from `Terminal`
+
+```{}
+createdb acme_employees
+psql -d acme_employees -f acme_employees.sql
+```
+
+## Initial look at database structure
+
+Exploring database relationships from `Terminal` using `psql` command line interface
+
+
+Three tables:
+• `employees` (200 records)
+• `feedbacks` (60 records)
+• `teams` (11 records)
+
+"Primary keys" (PK) and "Foreign keys" (FK)
+• `employees`: PK id, FK `team_id` NOT NULL, referenced by `feedbacks`.
+• `teams`: PK id, no FK, referenced by `employees`
+• `feedbacks`: PK id, FK `employee_id` NOT NULL
+
+Table relationships:
+• One team has many employees
+• One employee has many feedbacks
+
+
+## Setting up database connection
+
+Loading the required R libraries
+```{r}
+library(keyring)
+library(RPostgreSQL)
+```
+
+Creating a local connection from R to acme_employees database
+```{r}
+# Using keychain on my Macbook
+
+keyring_unlock(keyring = "local")
+
+username <- key_get(service = "postgresql_username",
+                    keyring = "local")
+
+password <- key_get(service = "postgresql_password",
+                    keyring = "local")
+
+db_connect<- dbConnect(drv = PostgreSQL(max.con = 3),
+                       user = username,
+                       password = password,
+                       dbname = "acme_employees",
+                       host = "localhost")
+```
+
+Mustn't forget to remove my username and password or disconnect from the database at the end (!)
+```{r}
+rm(username, password)
+```
+
+
+## Pulling data
+
+Creating a new data.frame containing details of all employees by querying SQL database
+```{r}
+#dbGetQuery
+employees <- as.data.frame(
+  dbGetQuery(db_connect,
+             "SELECT * FROM employees")
+  )
+employees
+```
+
+## Adding new fields and joining tables
+
+Retrieving records for all employees but this time adding a `full_name` field.
+```{r}
+dbGetQuery(db_connect,
+"SELECT CONCAT(first_name, last_name) AS full_name,
+* FROM employees"
+)
+```
+
+Retrieving details of all employees and this time listing `team_name` instead of `team_id`
+
+```{r}
+#Using INNER JOIN on list of team names in relational database without creating aliases (for clarity)
+
+dbGetQuery(db_connect,
+"SELECT teams.name, employees.first_name, employees.last_name, employees.email 
+FROM employees INNER JOIN teams
+on employees.team_id = teams.id")
+```
+
+## Making queries
+
+Breaking down number of employees per team.
+```{r}
+dbGetQuery(db_connect,
+           "SELECT teams.name, COUNT(*)
+           FROM teams LEFT JOIN employees
+           on teams.id = employees.team_id
+           GROUP BY teams.name
+           ORDER BY COUNT(*) DESC")
+```
+
+
+AcmeCorp management wouldn't be able to email their employees easily if just using on this database as there are a lot of invalid email addresses there.
+
+Identifying these employees,
+```{r}
+# looking for `email` fields that don't contain @ or are empty
+dbGetQuery(db_connect,
+           "SELECT first_name, last_name, email
+           FROM employees
+           WHERE email NOT LIKE '%@%' OR email IS NULL")
+```
+
+Finding employee that gave most recent feedback
+
+```{r}
+dbGetQuery(db_connect,
+"SELECT feedbacks.date, employees.first_name, employees.last_name, feedbacks.message
+FROM feedbacks LEFT JOIN employees ON feedbacks.employee_id = employees.id
+   ORDER BY feedbacks.date DESC
+   LIMIT 1
+  ")
+
+# Could also have used
+# WHERE feedbacks.date = (SELECT MAX(date) FROM feedbacks)
+```
+
+One of the teams has a problem with employees whose first_name contains their first initial rather than their whole first name.
+
+Finding name of the team which has the worst problem with this.
+```{r}
+dbGetQuery(db_connect,
+"SELECT employees.first_name, employees.last_name, teams.name
+FROM employees INNER JOIN teams
+ON teams.id = employees.team_id
+WHERE employees.first_name LIKE '_'")
+
+dbGetQuery(db_connect,
+"SELECT teams.name, count(teams.name)
+FROM employees INNER JOIN teams
+ON teams.id = employees.team_id
+WHERE employees.first_name LIKE '_'
+GROUP BY teams.name
+ORDER BY count DESC NULLS LAST
+LIMIT 1")
+```
+
+# Basic sentiment analysis by combining SQL and R coding
+
+
+AcmeCorp would like to perform very basic ‘sentiment analysis’ on stored employee feedbacks. They have provided a set of ‘positive’ and ‘negative’ words to use to score feedback messages in this analysis.
+
+
+## Scoring framework
+
+• The score for each message should start at zero.
+• Every time a ‘positive’ word occurs in a message, message’s score should increase by 1 point.
+• Every time a ‘negative’ word occurs in a message, message’s score should decrease by 1 point.
+
+List of positive words
+```{r}
+positive_words <- c("great", "good", "happy", "content", "fulfilled", "fulfilled", "positive", "positives", "cheerful", "nice", "ambition", "ambitions", "ambitious", "friendly", "progress", "joy", "fast", "achieve", "achieving", "achievements", "best", "better",  "unlimited", "pros", "competitive", "opportunity", "advancement", "friendly", "smart", "interesting", "challenging", "grow", "caring", "balance", "helpful")
+```
+
+List of negative words
+```{r}
+negative_words <- c("worse", "worsening", "worst", "slow", "sluggish", "impatient", "unfulfilled", "unfulfilling", "negative", "bad", "limited", "limit", "limitations", "cons", "frustrated", "frustrating", "frustration", "dull", "boring", "politics", "political", "ignore", "ignored", "ignoring", "sad", "depressed", "depressing", "nasty", "stress", "stresses", "stressed", "horrid", "horrible", "terrible", "deadline", "deadlines", "uncaring", "remote")
+```
+
+
+## Simplifying text structure for analysis
+
+```{r}
+# Querying database for feedback messages
+feedback <- dbGetQuery(db_connect, "SELECT message FROM feedbacks")
+feedback
+
+# Extracting information
+textwork <- feedback$message
+textwork
+length(textwork)
+
+# setting everything to lowercase for ease of word recognition
+textwork <- tolower(textwork)
+
+# Using gsub to flag and remove punction
+clean_text <- gsub("[[:punct:]]"," ", textwork)
+
+```
+
+
+## Text analysis
+
+
+Scoring the messages
+```{r}
+# Creating a function to programatically score the messages
+
+score_message <- function(message, positive_words, negative_words){
+  message_words <- unlist(strsplit(message, split = " ", fixed = TRUE))
+  message_score <- 0
+  
+  for (word in positive_words){
+    message_score <- message_score + sum(message_words == word)
+  }
+  
+  for (word in negative_words){
+    message_score <- message_score - sum(message_words == word)
+  }
+  
+  return(message_score)
+}
+```
+
+Cleaning and then adding the scores to the original feedback messages
+```{r}
+score <- numeric()
+for (message in feedback[, 'message']){
+  message <- gsub("[[:punct:]]"," ", message)
+  message_score <- score_message(message, positive_words, negative_words)
+  score <- c(score, message_score)
+}
+
+# add the scores 
+feedback['score'] <- score
+feedback
+```
+
+
+Finding the most positive and negative employees
+
+
+```{r}
+most_positive <- feedback[, "score"] == max(feedback[, 'score'])
+
+mostpos_employees_teams <- feedback[most_positive, "team_name"]
+mostpos_employees_teams
+```
+
+Finding the most positive teams
+
+```{r}
+
+```
+
+## Don't forget to disconnect from the database!
+
+```{r}
+#dbDisconnect(db_connect)
+```
+
+
+
+```{r}
+#It's good practice to code out your database discconection first as a reminder.  Don't want to upset your colleagues by monopolising a connection if you're not using it.  Worth commenting it out to avoid disconnecting by accident though.
+
+dbDisconnect(conn = db_connect)
+```
+
