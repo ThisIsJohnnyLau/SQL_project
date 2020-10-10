@@ -295,7 +295,7 @@ float: none;
         self._setEventHandlers();
 
         // Binding to the Window load event to make sure the correct scrollTop is calculated
-        $(window).on("load", function() {
+        $(window).load(function() {
 
           // Sets the active TOC item
           self._setActiveElement(true);
@@ -1120,11 +1120,7 @@ float: none;
 
   })); //end of plugin
 </script>
-<script>// Nav markup changed considerably from BS3 -> BS4. To ease migration,
-// bootstraplib has additional JS/CSS which allows us to use BS3-style nav in BS4,
-// so we use BS4 markup only if we're running BS4 or higher without bootstraplib's compatibility shim
-window.BS3_NAV = window.BS3_COMPAT || !!$.fn.tab.Constructor.VERSION.match(/^3\./);
-
+<script>
 
 /**
  * jQuery Plugin: Sticky Tabs
@@ -1140,8 +1136,7 @@ window.BS3_NAV = window.BS3_COMPAT || !!$.fn.tab.Constructor.VERSION.match(/^3\.
     // Show the tab corresponding with the hash in the URL, or the first tab
     var showStuffFromHash = function() {
       var hash = window.location.hash;
-      var selector = hash ? 'a[href="' + hash + '"]' :
-        window.BS3_NAV ? 'li.active > a' : '.nav-link.active';
+      var selector = hash ? 'a[href="' + hash + '"]' : 'li.active > a';
       var $selector = $(selector, context);
       if($selector.data('toggle') === "tab") {
         $selector.tab('show');
@@ -1233,9 +1228,7 @@ window.buildTabsets = function(tocID) {
       var a = $('<a role="tab" data-toggle="tab">' + headingText + '</a>');
       a.attr('href', '#' + id);
       a.attr('aria-controls', id);
-      if (!window.BS3_NAV) a.addClass("nav-link");
       var li = $('<li role="presentation"></li>');
-      if (!window.BS3_NAV) li.addClass("nav-item");
       li.append(a);
       tabList.append(li);
 
@@ -1250,24 +1243,15 @@ window.buildTabsets = function(tocID) {
       tab.detach().appendTo(tabContent);
     });
 
-    // activate tab (note users can add an .active class)
-    var navLinks = window.BS3_NAV ? tabList.children('li') : tabList.find(".nav-link");
-    $(navLinks[activeTab]).tab("show");
-
-    // make sure active content is shown on load
+    // set active tab
+    $(tabList.children('li')[activeTab]).addClass('active');
     var active = $(tabContent.children('div.section')[activeTab]);
     active.addClass('active');
     if (fade)
-      active.addClass(window.BS3_NAV ? 'in' : 'show');
+      active.addClass('in');
 
     if (tabset.hasClass("tabset-sticky"))
       tabset.rmarkdownStickyTabs();
-
-    // .tabset-dropdown is not an official bootstrap thing
-    // but relies on some custom CSS within default.html
-    if (tabset.hasClass("tabset-dropdown")) {
-      $(tabList.children('li')[activeTab]).addClass("active-dropdown-tab");
-    }
   }
 
   // convert section divs with the .tabset class to tabsets
@@ -2571,17 +2555,8 @@ window.onload = function() {
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
-  pre {
-    background-color: #f5f5f5;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    padding: .5rem;
-  }
   pre:not([class]) {
     background-color: white;
-  }
-  pre code {
-    background-color: transparent;
   }
 </style>
 <script type="text/javascript">
@@ -2618,7 +2593,6 @@ h5 {
 h6 {
   font-size: 12px;
 }
-
 .table th:not([align]) {
   text-align: left;
 }
@@ -2656,22 +2630,20 @@ summary {
 
 
 
-<!--
-  Note that .tabset-dropdown was initially implemented using Glyphicons, which were dropped
-  in BS4. The idea behind the "equivalent" BS4 CSS derives from how carets are implemented
-  https://github.com/twbs/bootstrap/blob/099860/scss/mixins/_caret.scss#L1
--->
+<!-- tabsets -->
+
 <style type="text/css">
 .tabset-dropdown > .nav-tabs {
   display: inline-table;
   max-height: 500px;
   min-height: 44px;
   overflow-y: auto;
+  background: white;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active-dropdown-tab:before {
+.tabset-dropdown > .nav-tabs > li.active:before {
   content: "";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
@@ -2679,7 +2651,7 @@ summary {
   border-right: 1px solid #ddd;
 }
 
-.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active-dropdown-tab:before {
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
   content: "";
   border: none;
 }
@@ -2692,7 +2664,7 @@ summary {
   border-right: 1px solid #ddd;
 }
 
-.tabset-dropdown > .nav-tabs > li.active-dropdown-tab {
+.tabset-dropdown > .nav-tabs > li.active {
   display: block;
 }
 
@@ -2792,18 +2764,18 @@ div.tocify {
 
 
 <!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row">
+<div class="row-fluid">
 <div class="col-xs-12 col-sm-4 col-md-3">
 <div id="TOC" class="tocify">
 </div>
 </div>
 
-<div class="toc-content col-sm-12 col-md-8 col-lg-9">
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
 
-<div id="header">
+<div class="fluid-row" id="header">
 
 
 
@@ -2812,42 +2784,60 @@ div.tocify {
 </div>
 
 
-<div class="blame">
-<p>author: “Jonathan Lau”<br></p>
+<div id="project-overview" class="section level1">
+<h1><span class="header-section-number">1</span> Project Overview</h1>
+<p><em>ACME Corporation - client database</em></p>
+<div id="project-outline" class="section level2">
+<h2><span class="header-section-number">1.1</span> Project outline</h2>
+<ul>
+<li>Basic analysis of stored data</li>
+<li>Quantitative analysis of emotional state of corporation based on stored <code>feedbacks</code>.</li>
+<li>Practising coding best practice for R and SQL.</li>
+</ul>
 </div>
-<hr>
-<br>
-<div class="emphasis">
-<p><em>ACME Corporation - client database</em><br></p>
-<h1 id="project-overview">Project Overview</h1>
-<h2 id="project-outline">Project outline:</h2>
-<p>• Basic analysis of stored data<br> • Quantitative analysis of emotional state of corporation based on stored <code>feedbacks</code>. • Practising coding best practice for R and SQL.</p>
-<h2 id="r-packages-used">R Packages used:</h2>
-<p>• keyring<br> • RPostgreSQL<br></p>
-<h2 id="description-of-data">Description of data:</h2>
-<p>• PostgreSQL database<br> • Contains three tables of information: details of <code>employees</code>, <code>teams</code> and <code>feedbacks</code>.<br> • <code>Feedbacks</code> is text detailing employees’ positive and negative experiences at work.</p>
+<div id="r-packages-used" class="section level2">
+<h2><span class="header-section-number">1.2</span> R Packages used</h2>
+<ul>
+<li>Keyring</li>
+<li>RPostgreSQL</li>
+</ul>
 </div>
-<p><br></p>
-<div id="querying-the-sql-database" class="section level1">
-<h1><span class="header-section-number">1</span> Querying the SQL database</h1>
-<div id="creating-a-local-postgresql-database-from-terminal" class="section level2">
-<h2><span class="header-section-number">1.1</span> Creating a local PostgreSQL database from <code>Terminal</code></h2>
+<div id="description-of-data" class="section level2">
+<h2><span class="header-section-number">1.3</span> Description of data:</h2>
+<ul>
+<li>PostgreSQL database</li>
+<li>Contains three tables of information: details of <code>employees</code>, <code>teams</code> and <code>feedbacks</code>.</li>
+<li><code>Feedbacks</code> is text detailing employees’ positive and negative experiences at work.</li>
+</ul>
+</div>
+</div>
+<div id="sql-database" class="section level1">
+<h1><span class="header-section-number">2</span> SQL database</h1>
+<div id="postgresql" class="section level2">
+<h2><span class="header-section-number">2.1</span> PostgreSQl</h2>
+<p>Creating a local PostgreSQL database from <code>Terminal</code></p>
 <pre><code>createdb acme_employees
 psql -d acme_employees -f acme_employees.sql</code></pre>
 </div>
-<div id="initial-look-at-database-structure" class="section level2">
-<h2><span class="header-section-number">1.2</span> Initial look at database structure</h2>
-<p>Exploring database relationships from <code>Terminal</code> using <code>psql</code> command line interface</p>
-<p>Three tables: • <code>employees</code> (200 records) • <code>feedbacks</code> (60 records) • <code>teams</code> (11 records)</p>
-<p>“Primary keys” (PK) and “Foreign keys” (FK) • <code>employees</code>: PK id, FK <code>team_id</code> NOT NULL, referenced by <code>feedbacks</code>. • <code>teams</code>: PK id, no FK, referenced by <code>employees</code> • <code>feedbacks</code>: PK id, FK <code>employee_id</code> NOT NULL</p>
-<p>Table relationships: • One team has many employees • One employee has many feedbacks</p>
+<div id="database-structure" class="section level2">
+<h2><span class="header-section-number">2.2</span> Database structure</h2>
+<p>Initial look at database structure - exploring database relationships from <code>Terminal</code> using <code>psql</code> command line interface</p>
+<p><strong>Three tables:</strong> * <code>employees</code> (200 records) * <code>feedbacks</code> (60 records) * <code>teams</code> (11 records)</p>
+<p><strong>“Primary keys” (PK) and “Foreign keys” (FK)</strong> * <code>employees</code>: PK id, FK <code>team_id</code> NOT NULL, referenced by <code>feedbacks</code>. * <code>teams</code>: PK id, no FK, referenced by <code>employees</code> * <code>feedbacks</code>: PK id, FK <code>employee_id</code> NOT NULL</p>
+<p><strong>Table relationships:</strong> * One team has many employees * One employee has many feedbacks</p>
 </div>
-<div id="setting-up-database-connection" class="section level2">
-<h2><span class="header-section-number">1.3</span> Setting up database connection</h2>
+</div>
+<div id="setting-database-connection" class="section level1">
+<h1><span class="header-section-number">3</span> Setting database connection</h1>
+<div id="libraries" class="section level2">
+<h2><span class="header-section-number">3.1</span> Libraries</h2>
 <p>Loading the required R libraries</p>
 <pre class="r"><code>library(keyring)
 library(RPostgreSQL)</code></pre>
 <pre><code>## Loading required package: DBI</code></pre>
+</div>
+<div id="connection" class="section level2">
+<h2><span class="header-section-number">3.2</span> Connection</h2>
 <p>Creating a local connection from R to acme_employees database</p>
 <pre class="r"><code># Using keychain on my Macbook
 
@@ -2864,11 +2854,17 @@ db_connect&lt;- dbConnect(drv = PostgreSQL(max.con = 3),
                        password = password,
                        dbname = &quot;acme_employees&quot;,
                        host = &quot;localhost&quot;)</code></pre>
+</div>
+<div id="security" class="section level2">
+<h2><span class="header-section-number">3.3</span> Security</h2>
 <p>Mustn’t forget to remove my username and password or disconnect from the database at the end (!)</p>
 <pre class="r"><code>rm(username, password)</code></pre>
 </div>
-<div id="pulling-data" class="section level2">
-<h2><span class="header-section-number">1.4</span> Pulling data</h2>
+</div>
+<div id="pulling-data" class="section level1">
+<h1><span class="header-section-number">4</span> Pulling data</h1>
+<div id="employees" class="section level2">
+<h2><span class="header-section-number">4.1</span> Employees</h2>
 <p>Creating a new data.frame containing details of all employees by querying SQL database</p>
 <pre class="r"><code>#dbGetQuery
 employees &lt;- as.data.frame(
@@ -2882,8 +2878,12 @@ employees</code></pre>
   </script>
 </div>
 </div>
-<div id="adding-new-fields-and-joining-tables" class="section level2">
-<h2><span class="header-section-number">1.5</span> Adding new fields and joining tables</h2>
+</div>
+<div id="data-manipulation" class="section level1">
+<h1><span class="header-section-number">5</span> Data manipulation</h1>
+<p>Adding new fields and joining tables</p>
+<div id="full-names" class="section level2">
+<h2><span class="header-section-number">5.1</span> Full names</h2>
 <p>Retrieving records for all employees but this time adding a <code>full_name</code> field.</p>
 <pre class="r"><code>dbGetQuery(db_connect,
 &quot;SELECT CONCAT(first_name, last_name) AS full_name,
@@ -2894,6 +2894,9 @@ employees</code></pre>
 {"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["full_name"],"name":[1],"type":["chr"],"align":["left"]},{"label":["id"],"name":[2],"type":["int"],"align":["right"]},{"label":["first_name"],"name":[3],"type":["chr"],"align":["left"]},{"label":["last_name"],"name":[4],"type":["chr"],"align":["left"]},{"label":["email"],"name":[5],"type":["chr"],"align":["left"]},{"label":["team_id"],"name":[6],"type":["int"],"align":["right"]}],"data":[{"1":"TabbyLesley","2":"1","3":"Tabby","4":"Lesley","5":"tlesley0@shinystat.com","6":"4","_rn_":"1"},{"1":"WallieEdson","2":"2","3":"Wallie","4":"Edson","5":"NA","6":"1","_rn_":"2"},{"1":"BunnieDi Maria","2":"3","3":"Bunnie","4":"Di Maria","5":"bdimaria2@list-manage.com","6":"3","_rn_":"3"},{"1":"HarrisCondliffe","2":"4","3":"Harris","4":"Condliffe","5":"hcondliffe3@apache.org","6":"1","_rn_":"4"},{"1":"LydiaShout","2":"5","3":"Lydia","4":"Shout","5":"lshout4@flavors.me","6":"10","_rn_":"5"},{"1":"GayelFear","2":"6","3":"Gayel","4":"Fear","5":"gfear5@columbia.edu","6":"7","_rn_":"6"},{"1":"MildridPinney","2":"7","3":"Mildrid","4":"Pinney","5":"mpinney6@hubpages.com","6":"6","_rn_":"7"},{"1":"SMathevet","2":"8","3":"S","4":"Mathevet","5":"smathevet7@state.tx.us","6":"3","_rn_":"8"},{"1":"CrinHollyar","2":"9","3":"Crin","4":"Hollyar","5":"chollyar8@vistaprint.com","6":"1","_rn_":"9"},{"1":"PalmerDi Nisco","2":"10","3":"Palmer","4":"Di Nisco","5":"pdinisco9@behance.net","6":"3","_rn_":"10"},{"1":"AdelindShout","2":"11","3":"Adelind","4":"Shout","5":"ashouta@tripod.com","6":"4","_rn_":"11"},{"1":"TrinaPolet","2":"12","3":"Trina","4":"Polet","5":"tpoletb@businessweek.com","6":"10","_rn_":"12"},{"1":"JasmineTuminelli","2":"13","3":"Jasmine","4":"Tuminelli","5":"jtuminellic@etsy.com","6":"1","_rn_":"13"},{"1":"SaritaFarenden","2":"14","3":"Sarita","4":"Farenden","5":"sfarendend@topsy.com","6":"1","_rn_":"14"},{"1":"DavinaCory","2":"15","3":"Davina","4":"Cory","5":"dcorye@w3.org","6":"10","_rn_":"15"},{"1":"HubertoBlockley","2":"16","3":"Huberto","4":"Blockley","5":"hblockleyf@fema.gov","6":"1","_rn_":"16"},{"1":"SaunchoPeake","2":"17","3":"Sauncho","4":"Peake","5":"speakeg@digg.com","6":"9","_rn_":"17"},{"1":"OreliaPassfield","2":"18","3":"Orelia","4":"Passfield","5":"opassfieldh@chicagotribune.com","6":"1","_rn_":"18"},{"1":"WandaLardiner","2":"19","3":"Wanda","4":"Lardiner","5":"wlardineri@amazon.de","6":"7","_rn_":"19"},{"1":"BennettHarvatt","2":"20","3":"Bennett","4":"Harvatt","5":"bharvattj@shutterfly.com","6":"1","_rn_":"20"},{"1":"DProven","2":"21","3":"D","4":"Proven","5":"dprovenk@moonfruit.com","6":"3","_rn_":"21"},{"1":"PyotrLantry","2":"22","3":"Pyotr","4":"Lantry","5":"NA","6":"2","_rn_":"22"},{"1":"BrennaBelden","2":"23","3":"Brenna","4":"Belden","5":"bbeldenm@nasa.gov","6":"8","_rn_":"23"},{"1":"DoretteAngel","2":"24","3":"Dorette","4":"Angel","5":"dangeln@weibo.com","6":"3","_rn_":"24"},{"1":"GregorioBrymham","2":"25","3":"Gregorio","4":"Brymham","5":"gbrymhamo@list-manage.com","6":"3","_rn_":"25"},{"1":"JayneCrankhorn","2":"26","3":"Jayne","4":"Crankhorn","5":"jcrankhornp@chronoengine.com","6":"7","_rn_":"26"},{"1":"HildyMain","2":"27","3":"Hildy","4":"Main","5":"hmainq@over-blog.com","6":"8","_rn_":"27"},{"1":"LionelNoli","2":"28","3":"Lionel","4":"Noli","5":"lnolir@joomla.org","6":"9","_rn_":"28"},{"1":"RockwellChasen","2":"29","3":"Rockwell","4":"Chasen","5":"rchasens@cornell.edu","6":"3","_rn_":"29"},{"1":"RianonFulkes","2":"30","3":"Rianon","4":"Fulkes","5":"rfulkest@deviantart.com","6":"9","_rn_":"30"},{"1":"AnnecorinneMerton","2":"31","3":"Annecorinne","4":"Merton","5":"amertonu@clickbank.net","6":"8","_rn_":"31"},{"1":"ImogenHovington","2":"32","3":"Imogen","4":"Hovington","5":"ihovingtonv@hubpages.com","6":"1","_rn_":"32"},{"1":"DorellaCrowden","2":"33","3":"Dorella","4":"Crowden","5":"dcrowdenw@pbs.org","6":"9","_rn_":"33"},{"1":"MontgomeryLyard","2":"34","3":"Montgomery","4":"Lyard","5":"mlyardx@washington.edu","6":"1","_rn_":"34"},{"1":"NoachHollyer","2":"35","3":"Noach","4":"Hollyer","5":"nhollyery@i2i.jp","6":"5","_rn_":"35"},{"1":"AsiaHatherill","2":"36","3":"Asia","4":"Hatherill","5":"ahatherillz *at* java.com","6":"9","_rn_":"36"},{"1":"WilfridChristal","2":"37","3":"Wilfrid","4":"Christal","5":"wchristal10@oracle.com","6":"9","_rn_":"37"},{"1":"JenicaVan Der Hoog","2":"38","3":"Jenica","4":"Van Der Hoog","5":"jvanderhoog11@photobucket.com","6":"10","_rn_":"38"},{"1":"HollisSevior","2":"39","3":"Hollis","4":"Sevior","5":"hsevior12@archive.org","6":"4","_rn_":"39"},{"1":"MyScripture","2":"40","3":"My","4":"Scripture","5":"mscripture13@geocities.com","6":"1","_rn_":"40"},{"1":"NevilleRushworth","2":"41","3":"Neville","4":"Rushworth","5":"nrushworth14@harvard.edu","6":"6","_rn_":"41"},{"1":"TraceeFrankes","2":"42","3":"Tracee","4":"Frankes","5":"tfrankes15@squidoo.com","6":"9","_rn_":"42"},{"1":"LillaEllor","2":"43","3":"Lilla","4":"Ellor","5":"lellor16@gnu.org","6":"9","_rn_":"43"},{"1":"BrittneBrislawn","2":"44","3":"Brittne","4":"Brislawn","5":"bbrislawn17@webnode.com","6":"1","_rn_":"44"},{"1":"TallulahCanedo","2":"45","3":"Tallulah","4":"Canedo","5":"tcanedo18@wunderground.com","6":"8","_rn_":"45"},{"1":"GrannieIskowicz","2":"46","3":"Grannie","4":"Iskowicz","5":"giskowicz19@un.org","6":"9","_rn_":"46"},{"1":"BardeTourot","2":"47","3":"Barde","4":"Tourot","5":"btourot1a@123-reg.co.uk","6":"2","_rn_":"47"},{"1":"SalRockcliff","2":"48","3":"Sal","4":"Rockcliff","5":"srockcliff1b@china.com.cn","6":"3","_rn_":"48"},{"1":"ChestonReichardt","2":"49","3":"Cheston","4":"Reichardt","5":"creichardt1c@ted.com","6":"8","_rn_":"49"},{"1":"RickertFearns","2":"50","3":"Rickert","4":"Fearns","5":"rfearns1d@yahoo.co.jp","6":"7","_rn_":"50"},{"1":"WashHannaford","2":"51","3":"Wash","4":"Hannaford","5":"whannaford1e@cnet.com","6":"7","_rn_":"51"},{"1":"ZondraElphick","2":"52","3":"Zondra","4":"Elphick","5":"zelphick1f@soundcloud.com","6":"9","_rn_":"52"},{"1":"CornallTempest","2":"53","3":"Cornall","4":"Tempest","5":"ctempest1g@geocities.jp","6":"6","_rn_":"53"},{"1":"MarcellineJahnke","2":"54","3":"Marcelline","4":"Jahnke","5":"mjahnke1h@fc2.com","6":"4","_rn_":"54"},{"1":"LinneaBerger","2":"55","3":"Linnea","4":"Berger","5":"lberger1i@google.fr","6":"2","_rn_":"55"},{"1":"JSatcher","2":"56","3":"J","4":"Satcher","5":"jsatcher1j@networkadvertising.org","6":"3","_rn_":"56"},{"1":"LiliaDucarne","2":"57","3":"Lilia","4":"Ducarne","5":"lducarne1k@who.int","6":"10","_rn_":"57"},{"1":"IngaborgPocklington","2":"58","3":"Ingaborg","4":"Pocklington","5":"ipocklington1l@ocn.ne.jp","6":"7","_rn_":"58"},{"1":"GuendolenMorshead","2":"59","3":"Guendolen","4":"Morshead","5":"gmorshead1m@blog.com","6":"1","_rn_":"59"},{"1":"OsbournDanzelman","2":"60","3":"Osbourn","4":"Danzelman","5":"odanzelman1n@google.cn","6":"10","_rn_":"60"},{"1":"SachaMeredyth","2":"61","3":"Sacha","4":"Meredyth","5":"smeredyth1o@state.tx.us","6":"1","_rn_":"61"},{"1":"DukyShord","2":"62","3":"Duky","4":"Shord","5":"dshord1p@edublogs.org","6":"10","_rn_":"62"},{"1":"DorieBains","2":"63","3":"Dorie","4":"Bains","5":"dbains1q@buzzfeed.com","6":"5","_rn_":"63"},{"1":"AdrianMcQuillin","2":"64","3":"Adrian","4":"McQuillin","5":"amcquillin1r@soundcloud.com","6":"8","_rn_":"64"},{"1":"AlbertinaAnespie","2":"65","3":"Albertina","4":"Anespie","5":"aanespie1s@buzzfeed.com","6":"4","_rn_":"65"},{"1":"CrystalCotton","2":"66","3":"Crystal","4":"Cotton","5":"ccotton1t@cpanel.net","6":"2","_rn_":"66"},{"1":"LeeseLinstead","2":"67","3":"Leese","4":"Linstead","5":"llinstead1u@github.com","6":"3","_rn_":"67"},{"1":"LoriGiorgioni","2":"68","3":"Lori","4":"Giorgioni","5":"lgiorgioni1v@infoseek.co.jp","6":"6","_rn_":"68"},{"1":"SammyDebrick","2":"69","3":"Sammy","4":"Debrick","5":"sdebrick1w@usgs.gov","6":"5","_rn_":"69"},{"1":"IsadorSneaker","2":"70","3":"Isador","4":"Sneaker","5":"isneaker1x@amazon.co.uk","6":"5","_rn_":"70"},{"1":"EvaniaRobjents","2":"71","3":"Evania","4":"Robjents","5":"erobjents1y@cpanel.net","6":"10","_rn_":"71"},{"1":"SammyMuggleston","2":"72","3":"Sammy","4":"Muggleston","5":"smuggleston1z@dion.ne.jp","6":"5","_rn_":"72"},{"1":"StearneEckert","2":"73","3":"Stearne","4":"Eckert","5":"seckert20@shinystat.com","6":"5","_rn_":"73"},{"1":"JanennaGallaher","2":"74","3":"Janenna","4":"Gallaher","5":"jgallaher21@walmart.com","6":"2","_rn_":"74"},{"1":"VitaMunnery","2":"75","3":"Vita","4":"Munnery","5":"vmunnery22@tumblr.com","6":"3","_rn_":"75"},{"1":"ShannonSpalls","2":"76","3":"Shannon","4":"Spalls","5":"sspalls23@qq.com","6":"9","_rn_":"76"},{"1":"DanellaRenzullo","2":"77","3":"Danella","4":"Renzullo","5":"drenzullo24@soup.io","6":"5","_rn_":"77"},{"1":"RomanAbazi","2":"78","3":"Roman","4":"Abazi","5":"rabazi25@google.it","6":"2","_rn_":"78"},{"1":"ArlineUpton","2":"79","3":"Arline","4":"Upton","5":"aupton26@domainmarket.com","6":"3","_rn_":"79"},{"1":"BonnyRawsen","2":"80","3":"Bonny","4":"Rawsen","5":"brawsen27@pcworld.com","6":"1","_rn_":"80"},{"1":"ChristynaCalbreath","2":"81","3":"Christyna","4":"Calbreath","5":"ccalbreath28@free.fr","6":"3","_rn_":"81"},{"1":"MaxieRisebarer","2":"82","3":"Maxie","4":"Risebarer","5":"mrisebarer29@jugem.jp","6":"1","_rn_":"82"},{"1":"IanBlonfield","2":"83","3":"Ian","4":"Blonfield","5":"iblonfield2a admin.ch","6":"2","_rn_":"83"},{"1":"CullenMcGown","2":"84","3":"Cullen","4":"McGown","5":"cmcgown2b@sciencedaily.com","6":"8","_rn_":"84"},{"1":"PersisTolhurst","2":"85","3":"Persis","4":"Tolhurst","5":"ptolhurst2c@plala.or.jp","6":"6","_rn_":"85"},{"1":"NoreneFilchagin","2":"86","3":"Norene","4":"Filchagin","5":"nfilchagin2d@huffingtonpost.com","6":"4","_rn_":"86"},{"1":"LatiaMcKeggie","2":"87","3":"Latia","4":"McKeggie","5":"lmckeggie2e@oakley.com","6":"9","_rn_":"87"},{"1":"JoelieRuberry","2":"88","3":"Joelie","4":"Ruberry","5":"jruberry2f@yandex.ru","6":"1","_rn_":"88"},{"1":"KristaLebreton","2":"89","3":"Krista","4":"Lebreton","5":"klebreton2g@clickbank.net","6":"6","_rn_":"89"},{"1":"TitusSpurgeon","2":"90","3":"Titus","4":"Spurgeon","5":"tspurgeon2h@sohu.com","6":"5","_rn_":"90"},{"1":"JonathonMcGlynn","2":"91","3":"Jonathon","4":"McGlynn","5":"jmcglynn2i@fc2.com","6":"9","_rn_":"91"},{"1":"AstrixGeldard","2":"92","3":"Astrix","4":"Geldard","5":"ageldard2j@behance.net","6":"9","_rn_":"92"},{"1":"TRegina","2":"93","3":"T","4":"Regina","5":"tregina2k@about.com","6":"1","_rn_":"93"},{"1":"EmanueleGeorgescu","2":"94","3":"Emanuele","4":"Georgescu","5":"egeorgescu2l@1688.com","6":"10","_rn_":"94"},{"1":"JozefYerrill","2":"95","3":"Jozef","4":"Yerrill","5":"jyerrill2m@yolasite.com","6":"6","_rn_":"95"},{"1":"JanaBygrave","2":"96","3":"Jana","4":"Bygrave","5":"jbygrave2n@surveymonkey.com","6":"5","_rn_":"96"},{"1":"RabiEllsbury","2":"97","3":"Rabi","4":"Ellsbury","5":"rellsbury2o@facebook.com","6":"6","_rn_":"97"},{"1":"WestbrookUbanks","2":"98","3":"Westbrook","4":"Ubanks","5":"wubanks2p@youtube.com","6":"8","_rn_":"98"},{"1":"JeanneDimmick","2":"99","3":"Jeanne","4":"Dimmick","5":"jdimmick2q@wikia.com","6":"6","_rn_":"99"},{"1":"TobyBlaisdell","2":"100","3":"Toby","4":"Blaisdell","5":"NA","6":"7","_rn_":"100"},{"1":"KathryneToomey","2":"101","3":"Kathryne","4":"Toomey","5":"ktoomey2s@businessinsider.com","6":"8","_rn_":"101"},{"1":"IggieGriffey","2":"102","3":"Iggie","4":"Griffey","5":"igriffey2t@toplist.cz","6":"4","_rn_":"102"},{"1":"ConcettinaScown","2":"103","3":"Concettina","4":"Scown","5":"cscown2u@bandcamp.com","6":"9","_rn_":"103"},{"1":"GiulioHaliday","2":"104","3":"Giulio","4":"Haliday","5":"ghaliday2v@moonfruit.com","6":"5","_rn_":"104"},{"1":"MaireSkiplorne","2":"105","3":"Maire","4":"Skiplorne","5":"mskiplorne2w@com.com","6":"6","_rn_":"105"},{"1":"IlseBarltrop","2":"106","3":"Ilse","4":"Barltrop","5":"ibarltrop2xmacromedia.com","6":"4","_rn_":"106"},{"1":"AlejoaBroomhead","2":"107","3":"Alejoa","4":"Broomhead","5":"abroomhead2y@meetup.com","6":"9","_rn_":"107"},{"1":"GretchenTidswell","2":"108","3":"Gretchen","4":"Tidswell","5":"gtidswell2z@cornell.edu","6":"9","_rn_":"108"},{"1":"RandeneArmall","2":"109","3":"Randene","4":"Armall","5":"rarmall30@myspace.com","6":"6","_rn_":"109"},{"1":"KariKobiela","2":"110","3":"Kari","4":"Kobiela","5":"kkobiela31@people.com.cn","6":"6","_rn_":"110"},{"1":"SalvidorFreeth","2":"111","3":"Salvidor","4":"Freeth","5":"sfreeth32@123-reg.co.uk","6":"2","_rn_":"111"},{"1":"AgnesGorgl","2":"112","3":"Agnes","4":"Gorgl","5":"agorgl33@oakley.com","6":"4","_rn_":"112"},{"1":"DonelleDollard","2":"113","3":"Donelle","4":"Dollard","5":"ddollard34@slate.com","6":"10","_rn_":"113"},{"1":"GarlandMatusiak","2":"114","3":"Garland","4":"Matusiak","5":"gmatusiak35@mapy.cz","6":"3","_rn_":"114"},{"1":"FlynnTowlson","2":"115","3":"Flynn","4":"Towlson","5":"ftowlson36@huffingtonpost.com","6":"6","_rn_":"115"},{"1":"EllenMassel","2":"116","3":"Ellen","4":"Massel","5":"emassel37@whitehouse.gov","6":"7","_rn_":"116"},{"1":"HarwellCheine","2":"117","3":"Harwell","4":"Cheine","5":"hcheine38@wiley.com","6":"6","_rn_":"117"},{"1":"BlancheGawthorpe","2":"118","3":"Blanche","4":"Gawthorpe","5":"bgawthorpe39@google.it","6":"2","_rn_":"118"},{"1":"LorriPesak","2":"119","3":"Lorri","4":"Pesak","5":"lpesak3a@cnn.com","6":"1","_rn_":"119"},{"1":"BrokTilling","2":"120","3":"Brok","4":"Tilling","5":"btilling3b@php.net","6":"1","_rn_":"120"},{"1":"GraciaWandtke","2":"121","3":"Gracia","4":"Wandtke","5":"gwandtke3c@networksolutions.com","6":"3","_rn_":"121"},{"1":"RaimundFishlock","2":"122","3":"Raimund","4":"Fishlock","5":"rfishlock3d@dailymail.co.uk","6":"2","_rn_":"122"},{"1":"DulcieGilbey","2":"123","3":"Dulcie","4":"Gilbey","5":"dgilbey3e@cbsnews.com","6":"9","_rn_":"123"},{"1":"AlberikShill","2":"124","3":"Alberik","4":"Shill","5":"ashill3f@house.gov","6":"8","_rn_":"124"},{"1":"BrittCroot","2":"125","3":"Britt","4":"Croot","5":"bcroot3g@va.gov","6":"3","_rn_":"125"},{"1":"MireilleFideler","2":"126","3":"Mireille","4":"Fideler","5":"mfideler3h@w3.org","6":"5","_rn_":"126"},{"1":"KnoxMcSharry","2":"127","3":"Knox","4":"McSharry","5":"kmcsharry3i@fda.gov","6":"2","_rn_":"127"},{"1":"EmmalynGallon","2":"128","3":"Emmalyn","4":"Gallon","5":"egallon3j@cbc.ca","6":"7","_rn_":"128"},{"1":"BenjyEskrigg","2":"129","3":"Benjy","4":"Eskrigg","5":"beskrigg3k@businessweek.com","6":"6","_rn_":"129"},{"1":"VallieDyott","2":"130","3":"Vallie","4":"Dyott","5":"vdyott3l@simplemachines.org","6":"9","_rn_":"130"},{"1":"ShurwoodBengle","2":"131","3":"Shurwood","4":"Bengle","5":"sbengle3m@posterous.com","6":"6","_rn_":"131"},{"1":"AmaleaRigts","2":"132","3":"Amalea","4":"Rigts","5":"arigts3n@i2i.jp","6":"7","_rn_":"132"},{"1":"DianemarieBennit","2":"133","3":"Dianemarie","4":"Bennit","5":"dbennit3o@businessinsider.com","6":"8","_rn_":"133"},{"1":"AbbeyThreadgill","2":"134","3":"Abbey","4":"Threadgill","5":"athreadgill3p@pagesperso-orange.fr","6":"4","_rn_":"134"},{"1":"CaleCrosser","2":"135","3":"Cale","4":"Crosser","5":"ccrosser3q@omniture.com","6":"9","_rn_":"135"},{"1":"BrantWinscum","2":"136","3":"Brant","4":"Winscum","5":"bwinscum3r@salon.com","6":"8","_rn_":"136"},{"1":"HGayler","2":"137","3":"H","4":"Gayler","5":"hgayler3s@youtube.com","6":"3","_rn_":"137"},{"1":"DagmarMathis","2":"138","3":"Dagmar","4":"Mathis","5":"dmathis3t@plala.or.jp","6":"10","_rn_":"138"},{"1":"SalliCaddy","2":"139","3":"Salli","4":"Caddy","5":"scaddy3u@mozilla.org","6":"6","_rn_":"139"},{"1":"KonstanzeFloodgate","2":"140","3":"Konstanze","4":"Floodgate","5":"kfloodgate3v@nba.com","6":"10","_rn_":"140"},{"1":"ArchyPocknoll","2":"141","3":"Archy","4":"Pocknoll","5":"apocknoll3w@imageshack.us","6":"8","_rn_":"141"},{"1":"ScottiMagson","2":"142","3":"Scotti","4":"Magson","5":"smagson3x@utexas.edu","6":"3","_rn_":"142"},{"1":"JodyJina","2":"143","3":"Jody","4":"Jina","5":"jjina3y@netscape.com","6":"6","_rn_":"143"},{"1":"RenaldoKneeshaw","2":"144","3":"Renaldo","4":"Kneeshaw","5":"rkneeshaw3z@amazon.co.uk","6":"9","_rn_":"144"},{"1":"AvieMegroff","2":"145","3":"Avie","4":"Megroff","5":"amegroff40@hhs.gov","6":"9","_rn_":"145"},{"1":"CareyDelaField","2":"146","3":"Carey","4":"DelaField","5":"cdelafield41@comsenz.com","6":"7","_rn_":"146"},{"1":"OdellaO'Fearguise","2":"147","3":"Odella","4":"O'Fearguise","5":"oofearguise42@multiply.com","6":"1","_rn_":"147"},{"1":"WilliMcBoyle","2":"148","3":"Willi","4":"McBoyle","5":"wmcboyle43@dot.gov","6":"4","_rn_":"148"},{"1":"DolfGhelerdini","2":"149","3":"Dolf","4":"Ghelerdini","5":"dghelerdini44@ifeng.com","6":"8","_rn_":"149"},{"1":"HieronymusCisneros","2":"150","3":"Hieronymus","4":"Cisneros","5":"hcisneros45@bloomberg.com","6":"10","_rn_":"150"},{"1":"DerwinRings","2":"151","3":"Derwin","4":"Rings","5":"drings46@zdnet.com","6":"4","_rn_":"151"},{"1":"ClaudiaGresham","2":"152","3":"Claudia","4":"Gresham","5":"cgresham47@google.com.au","6":"9","_rn_":"152"},{"1":"ModestiaUttley","2":"153","3":"Modestia","4":"Uttley","5":"muttley48@hatena.ne.jp","6":"7","_rn_":"153"},{"1":"ArnaldoGingles","2":"154","3":"Arnaldo","4":"Gingles","5":"agingles49@state.tx.us","6":"8","_rn_":"154"},{"1":"WallieCastellino","2":"155","3":"Wallie","4":"Castellino","5":"wcastellino4a@cnn.com","6":"8","_rn_":"155"},{"1":"ArneSlides","2":"156","3":"Arne","4":"Slides","5":"aslides4b@dropbox.com","6":"4","_rn_":"156"},{"1":"PPrescote","2":"157","3":"P","4":"Prescote","5":"pprescote4c@fc2.com","6":"3","_rn_":"157"},{"1":"KarolinaElvin","2":"158","3":"Karolina","4":"Elvin","5":"kelvin4d@amazon.de","6":"4","_rn_":"158"},{"1":"LinnellMerritt","2":"159","3":"Linnell","4":"Merritt","5":"lmerritt4e@constantcontact.com","6":"7","_rn_":"159"},{"1":"JessPurkess","2":"160","3":"Jess","4":"Purkess","5":"jpurkess4f@soup.io","6":"7","_rn_":"160"},{"1":"LeopoldChilds","2":"161","3":"Leopold","4":"Childs","5":"lchilds4g@digg.com","6":"2","_rn_":"161"},{"1":"JanLoughnan","2":"162","3":"Jan","4":"Loughnan","5":"jloughnan4h@admin.ch","6":"6","_rn_":"162"},{"1":"PippyScotchford","2":"163","3":"Pippy","4":"Scotchford","5":"pscotchford4i@opensource.org","6":"9","_rn_":"163"},{"1":"NorrisSoffe","2":"164","3":"Norris","4":"Soffe","5":"nsoffe4jstate.gov","6":"4","_rn_":"164"},{"1":"MiranPoyzer","2":"165","3":"Miran","4":"Poyzer","5":"mpoyzer4k@amazon.com","6":"1","_rn_":"165"},{"1":"TuckyBulger","2":"166","3":"Tucky","4":"Bulger","5":"tbulger4l@dmoz.org","6":"7","_rn_":"166"},{"1":"ElvisLendon","2":"167","3":"Elvis","4":"Lendon","5":"elendon4m@columbia.edu","6":"2","_rn_":"167"},{"1":"NettieFilyashin","2":"168","3":"Nettie","4":"Filyashin","5":"nfilyashin4n@hexun.com","6":"1","_rn_":"168"},{"1":"JinnyTregenza","2":"169","3":"Jinny","4":"Tregenza","5":"jtregenza4o@google.pl","6":"9","_rn_":"169"},{"1":"AldwinHurler","2":"170","3":"Aldwin","4":"Hurler","5":"ahurler4p@nationalgeographic.com","6":"3","_rn_":"170"},{"1":"CordelieBeckles","2":"171","3":"Cordelie","4":"Beckles","5":"cbeckles4q@tumblr.com","6":"9","_rn_":"171"},{"1":"KingMacAlees","2":"172","3":"King","4":"MacAlees","5":"kmacalees4r@nba.com","6":"4","_rn_":"172"},{"1":"VinsonTuckley","2":"173","3":"Vinson","4":"Tuckley","5":"vtuckley4s@xrea.com","6":"1","_rn_":"173"},{"1":"HyattMulvany","2":"174","3":"Hyatt","4":"Mulvany","5":"hmulvany4t@japanpost.jp","6":"6","_rn_":"174"},{"1":"NollYu","2":"175","3":"Noll","4":"Yu","5":"nyu4u@nationalgeographic.com","6":"1","_rn_":"175"},{"1":"AshGrabban","2":"176","3":"Ash","4":"Grabban","5":"agrabban4v@fda.gov","6":"4","_rn_":"176"},{"1":"LinShutler","2":"177","3":"Lin","4":"Shutler","5":"lshutler4w@delicious.com","6":"8","_rn_":"177"},{"1":"KevanScotchbourouge","2":"178","3":"Kevan","4":"Scotchbourouge","5":"kscotchbourouge4x@goo.ne.jp","6":"2","_rn_":"178"},{"1":"BrionSebastian","2":"179","3":"Brion","4":"Sebastian","5":"bsebastian4y@rambler.ru","6":"6","_rn_":"179"},{"1":"LeighMc Gaughey","2":"180","3":"Leigh","4":"Mc Gaughey","5":"lmcgaughey4z@de.vu","6":"7","_rn_":"180"},{"1":"ArtFeehely","2":"181","3":"Art","4":"Feehely","5":"afeehely50@webnode.com","6":"9","_rn_":"181"},{"1":"ViviaBirden","2":"182","3":"Vivia","4":"Birden","5":"vbirden51@webs.com","6":"8","_rn_":"182"},{"1":"RaniceBeckey","2":"183","3":"Ranice","4":"Beckey","5":"rbeckey52@goo.gl","6":"2","_rn_":"183"},{"1":"BibbyJurasek","2":"184","3":"Bibby","4":"Jurasek","5":"bjurasek53@usa.gov","6":"10","_rn_":"184"},{"1":"JSpir","2":"185","3":"J","4":"Spir","5":"jspir54@example.com","6":"3","_rn_":"185"},{"1":"TobeyDulinty","2":"186","3":"Tobey","4":"Dulinty","5":"tdulinty55@illinois.edu","6":"3","_rn_":"186"},{"1":"MarijnHessenthaler","2":"187","3":"Marijn","4":"Hessenthaler","5":"mhessenthaler56@fastcompany.com","6":"2","_rn_":"187"},{"1":"MelanyO'Finan","2":"188","3":"Melany","4":"O'Finan","5":"mofinan57@ustream.tv","6":"10","_rn_":"188"},{"1":"AndersonBergstrand","2":"189","3":"Anderson","4":"Bergstrand","5":"abergstrand58@canalblog.com","6":"10","_rn_":"189"},{"1":"LaurieLanchester","2":"190","3":"Laurie","4":"Lanchester","5":"llanchester59@mapy.cz","6":"5","_rn_":"190"},{"1":"BaryArrigucci","2":"191","3":"Bary","4":"Arrigucci","5":"barrigucci5a@slate.com","6":"1","_rn_":"191"},{"1":"WelshTourne","2":"192","3":"Welsh","4":"Tourne","5":"wtourne5b@twitpic.com","6":"9","_rn_":"192"},{"1":"SusanettaPulhoster","2":"193","3":"Susanetta","4":"Pulhoster","5":"spulhoster5c@i2i.jp","6":"4","_rn_":"193"},{"1":"BHorning","2":"194","3":"B","4":"Horning","5":"bhorning5d@oracle.com","6":"3","_rn_":"194"},{"1":"EmlenBlackburn","2":"195","3":"Emlen","4":"Blackburn","5":"eblackburn5e@ow.ly","6":"6","_rn_":"195"},{"1":"ArlinChismon","2":"196","3":"Arlin","4":"Chismon","5":"achismon5f@last.fm","6":"10","_rn_":"196"},{"1":"DunHaward","2":"197","3":"Dun","4":"Haward","5":"dhaward5g@illinois.edu","6":"2","_rn_":"197"},{"1":"CartHadlee","2":"198","3":"Cart","4":"Hadlee","5":"chadlee5h@livejournal.com","6":"3","_rn_":"198"},{"1":"DenyNutbeem","2":"199","3":"Deny","4":"Nutbeem","5":"dnutbeem5i@weebly.com","6":"4","_rn_":"199"},{"1":"BrettFasset","2":"200","3":"Brett","4":"Fasset","5":"bfasset5j@canalblog.com","6":"7","_rn_":"200"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
+</div>
+<div id="team-names" class="section level2">
+<h2><span class="header-section-number">5.2</span> Team names</h2>
 <p>Retrieving details of all employees and this time listing <code>team_name</code> instead of <code>team_id</code></p>
 <pre class="r"><code>#Using INNER JOIN on list of team names in relational database without creating aliases (for clarity)
 
@@ -2907,8 +2910,11 @@ on employees.team_id = teams.id&quot;)</code></pre>
   </script>
 </div>
 </div>
-<div id="making-queries" class="section level2">
-<h2><span class="header-section-number">1.6</span> Making queries</h2>
+</div>
+<div id="queries" class="section level1">
+<h1><span class="header-section-number">6</span> Queries</h1>
+<div id="team-members" class="section level2">
+<h2><span class="header-section-number">6.1</span> Team members</h2>
 <p>Breaking down number of employees per team.</p>
 <pre class="r"><code>dbGetQuery(db_connect,
            &quot;SELECT teams.name, COUNT(*)
@@ -2921,8 +2927,11 @@ on employees.team_id = teams.id&quot;)</code></pre>
 {"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["name"],"name":[1],"type":["chr"],"align":["left"]},{"label":["count"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"Data Escalate","2":"28","_rn_":"1"},{"1":"Audit Team 1","2":"26","_rn_":"2"},{"1":"Risk Team 1","2":"24","_rn_":"3"},{"1":"Risk Escalate","2":"22","_rn_":"4"},{"1":"Risk Team 2","2":"19","_rn_":"5"},{"1":"Data Team 2","2":"18","_rn_":"6"},{"1":"Audit Team 2","2":"17","_rn_":"7"},{"1":"Data Team 1","2":"17","_rn_":"8"},{"1":"Corporate","2":"17","_rn_":"9"},{"1":"Audit Escalate","2":"12","_rn_":"10"},{"1":"Uncommitted","2":"1","_rn_":"11"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
+</div>
+<div id="identification" class="section level2">
+<h2><span class="header-section-number">6.2</span> Identification</h2>
 <p>AcmeCorp management wouldn’t be able to email their employees easily if just using on this database as there are a lot of invalid email addresses there.</p>
-<p>Identifying these employees,</p>
+<p>Identifying these employees.</p>
 <pre class="r"><code># looking for `email` fields that don't contain @ or are empty
 dbGetQuery(db_connect,
            &quot;SELECT first_name, last_name, email
@@ -2933,6 +2942,9 @@ dbGetQuery(db_connect,
 {"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["first_name"],"name":[1],"type":["chr"],"align":["left"]},{"label":["last_name"],"name":[2],"type":["chr"],"align":["left"]},{"label":["email"],"name":[3],"type":["chr"],"align":["left"]}],"data":[{"1":"Wallie","2":"Edson","3":"NA","_rn_":"1"},{"1":"Pyotr","2":"Lantry","3":"NA","_rn_":"2"},{"1":"Asia","2":"Hatherill","3":"ahatherillz *at* java.com","_rn_":"3"},{"1":"Ian","2":"Blonfield","3":"iblonfield2a admin.ch","_rn_":"4"},{"1":"Toby","2":"Blaisdell","3":"NA","_rn_":"5"},{"1":"Ilse","2":"Barltrop","3":"ibarltrop2xmacromedia.com","_rn_":"6"},{"1":"Norris","2":"Soffe","3":"nsoffe4jstate.gov","_rn_":"7"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
+</div>
+<div id="feedback" class="section level2">
+<h2><span class="header-section-number">6.3</span> Feedback</h2>
 <p>Finding employee that gave most recent feedback</p>
 <pre class="r"><code>dbGetQuery(db_connect,
 &quot;SELECT feedbacks.date, employees.first_name, employees.last_name, feedbacks.message
@@ -2947,6 +2959,9 @@ FROM feedbacks LEFT JOIN employees ON feedbacks.employee_id = employees.id
 </div>
 <pre class="r"><code># Could also have used
 # WHERE feedbacks.date = (SELECT MAX(date) FROM feedbacks)</code></pre>
+</div>
+<div id="data-entry-problem" class="section level2">
+<h2><span class="header-section-number">6.4</span> Data entry problem</h2>
 <p>One of the teams has a problem with employees whose first_name contains their first initial rather than their whole first name.</p>
 <p>Finding name of the team which has the worst problem with this.</p>
 <pre class="r"><code>dbGetQuery(db_connect,
@@ -2974,19 +2989,20 @@ LIMIT 1&quot;)</code></pre>
 </div>
 </div>
 </div>
-<div id="basic-sentiment-analysis-by-combining-sql-and-r-coding" class="section level1">
-<h1><span class="header-section-number">2</span> Basic sentiment analysis by combining SQL and R coding</h1>
+<div id="combining-sql-and-r" class="section level1">
+<h1><span class="header-section-number">7</span> Combining SQL and R</h1>
+<div id="basic-sentiment-analysis" class="section level2">
+<h2><span class="header-section-number">7.1</span> Basic sentiment analysis</h2>
 <p>AcmeCorp would like to perform very basic ‘sentiment analysis’ on stored employee feedbacks. They have provided a set of ‘positive’ and ‘negative’ words to use to score feedback messages in this analysis.</p>
-<div id="scoring-framework" class="section level2">
-<h2><span class="header-section-number">2.1</span> Scoring framework</h2>
-<p>• The score for each message should start at zero. • Every time a ‘positive’ word occurs in a message, message’s score should increase by 1 point. • Every time a ‘negative’ word occurs in a message, message’s score should decrease by 1 point.</p>
-<p>List of positive words</p>
+<p><strong>Scoring framework</strong> * The score for each message should start at zero. * Every time a ‘positive’ word occurs in a message, message’s score should increase by 1 point. * Every time a ‘negative’ word occurs in a message, message’s score should decrease by 1 point.</p>
+<p><strong>List of positive words</strong></p>
 <pre class="r"><code>positive_words &lt;- c(&quot;great&quot;, &quot;good&quot;, &quot;happy&quot;, &quot;content&quot;, &quot;fulfilled&quot;, &quot;fulfilled&quot;, &quot;positive&quot;, &quot;positives&quot;, &quot;cheerful&quot;, &quot;nice&quot;, &quot;ambition&quot;, &quot;ambitions&quot;, &quot;ambitious&quot;, &quot;friendly&quot;, &quot;progress&quot;, &quot;joy&quot;, &quot;fast&quot;, &quot;achieve&quot;, &quot;achieving&quot;, &quot;achievements&quot;, &quot;best&quot;, &quot;better&quot;,  &quot;unlimited&quot;, &quot;pros&quot;, &quot;competitive&quot;, &quot;opportunity&quot;, &quot;advancement&quot;, &quot;friendly&quot;, &quot;smart&quot;, &quot;interesting&quot;, &quot;challenging&quot;, &quot;grow&quot;, &quot;caring&quot;, &quot;balance&quot;, &quot;helpful&quot;)</code></pre>
-<p>List of negative words</p>
+<p><strong>List of negative words</strong></p>
 <pre class="r"><code>negative_words &lt;- c(&quot;worse&quot;, &quot;worsening&quot;, &quot;worst&quot;, &quot;slow&quot;, &quot;sluggish&quot;, &quot;impatient&quot;, &quot;unfulfilled&quot;, &quot;unfulfilling&quot;, &quot;negative&quot;, &quot;bad&quot;, &quot;limited&quot;, &quot;limit&quot;, &quot;limitations&quot;, &quot;cons&quot;, &quot;frustrated&quot;, &quot;frustrating&quot;, &quot;frustration&quot;, &quot;dull&quot;, &quot;boring&quot;, &quot;politics&quot;, &quot;political&quot;, &quot;ignore&quot;, &quot;ignored&quot;, &quot;ignoring&quot;, &quot;sad&quot;, &quot;depressed&quot;, &quot;depressing&quot;, &quot;nasty&quot;, &quot;stress&quot;, &quot;stresses&quot;, &quot;stressed&quot;, &quot;horrid&quot;, &quot;horrible&quot;, &quot;terrible&quot;, &quot;deadline&quot;, &quot;deadlines&quot;, &quot;uncaring&quot;, &quot;remote&quot;)</code></pre>
 </div>
-<div id="simplifying-text-structure-for-analysis" class="section level2">
-<h2><span class="header-section-number">2.2</span> Simplifying text structure for analysis</h2>
+<div id="simplification" class="section level2">
+<h2><span class="header-section-number">7.2</span> Simplification</h2>
+<p>Simplifying text structure for analysis</p>
 <pre class="r"><code># Querying database for feedback messages
 feedback &lt;- dbGetQuery(db_connect, &quot;SELECT message FROM feedbacks&quot;)
 feedback</code></pre>
@@ -3067,7 +3083,7 @@ textwork &lt;- tolower(textwork)
 clean_text &lt;- gsub(&quot;[[:punct:]]&quot;,&quot; &quot;, textwork)</code></pre>
 </div>
 <div id="text-analysis" class="section level2">
-<h2><span class="header-section-number">2.3</span> Text analysis</h2>
+<h2><span class="header-section-number">7.3</span> Text analysis</h2>
 <p>Scoring the messages</p>
 <pre class="r"><code># Creating a function to programatically score the messages
 
@@ -3109,9 +3125,12 @@ mostpos_employees_teams</code></pre>
 <pre><code>## NULL</code></pre>
 <p>Finding the most positive teams</p>
 </div>
-<div id="dont-forget-to-disconnect-from-the-database" class="section level2">
-<h2><span class="header-section-number">2.4</span> Don’t forget to disconnect from the database!</h2>
-<pre class="r"><code>#dbDisconnect(db_connect)</code></pre>
+</div>
+<div id="security-1" class="section level1">
+<h1><span class="header-section-number">8</span> Security</h1>
+<div id="disconnecting" class="section level2">
+<h2><span class="header-section-number">8.1</span> Disconnecting</h2>
+<p>Don’t forget to disconnect from the database!</p>
 <pre class="r"><code>#It's good practice to code out your database discconection first as a reminder.  Don't want to upset your colleagues by monopolising a connection if you're not using it.  Worth commenting it out to avoid disconnecting by accident though.
 
 dbDisconnect(conn = db_connect)</code></pre>
@@ -3148,9 +3167,7 @@ $(document).ready(function () {
 
 $(document).ready(function () {
   $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open');
-    $(this).siblings().removeClass("active-dropdown-tab");
-    $(this).addClass("active-dropdown-tab");
+    $(this).parent().toggleClass('nav-tabs-open')
   });
 });
 </script>
